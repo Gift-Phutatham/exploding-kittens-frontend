@@ -14,9 +14,9 @@
     "format": "prettier --write src/"
   },
   "lint-staged": {
-    "**/*.{ts,tsx,vue}": [
-      "npx eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-      "npx prettier --write src/"
+    "*.{ts,tsx,vue}": [
+      "npx lint",
+      "npx format"
     ]
   },
   "husky": {

@@ -11,7 +11,7 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "format": "prettier --write src/",
+    "format": "prettier --write .",
     "configure-husky": "npx husky install && npx husky add .husky/pre-commit \"npx --no-install lint-staged\""
   },
   "lint-staged": {
@@ -26,6 +26,8 @@
     }
   },
   "dependencies": {
+    "socket.io": "^4.6.1",
+    "socket.io-client": "^4.6.1",
     "vue": "^3.2.47"
   },
   "devDependencies": {

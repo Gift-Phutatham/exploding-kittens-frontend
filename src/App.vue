@@ -1,23 +1,26 @@
-<script lang="ts">
-import SocketioService from './services/socketio.service.js';
-
-export default {
-  name: 'App',
-  data() {
-    return {};
-  },
-  methods: {},
-  created() {
-    SocketioService.setupSocketConnection();
-  },
-  beforeUnmount() {
-    SocketioService.disconnect();
-  },
-};
-</script>
-
 <template>
-  <main></main>
+  <v-app>
+    <v-main>
+      <HelloWorld />
+    </v-main>
+  </v-app>
 </template>
 
-<style></style>
+<script lang="ts">
+import { defineComponent } from 'vue';
+import HelloWorld from './components/HelloWorld.vue';
+
+export default defineComponent({
+  name: 'App',
+
+  components: {
+    HelloWorld,
+  },
+
+  data() {
+    return {
+      //
+    };
+  },
+});
+</script>

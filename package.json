@@ -15,7 +15,7 @@
     "configure-husky": "npx husky install && npx husky add .husky/pre-commit \"npx --no-install lint-staged\""
   },
   "lint-staged": {
-    "**/*.{.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts}": "npm run lint",
+    "**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts}": "npm run lint",
     "**/*": "npm run format"
   },
   "husky": {

@@ -8,6 +8,10 @@ class SocketioService {
     this.socket = io('http://localhost:3000');
   }
 
+  startGame(body) {
+    this.socket.emit('start game', body);
+  }
+
   disconnect() {
     if (this.socket) {
       this.socket.disconnect();

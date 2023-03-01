@@ -1,18 +1,23 @@
 <script lang="ts">
-import socketioService from './services/socketio.service.js';
+import SocketioService from './services/socketio.service.js';
 
 export default {
   name: 'App',
+  data() {
+    return {};
+  },
+  methods: {},
   created() {
-    socketioService.setupSocketConnection();
+    SocketioService.setupSocketConnection();
+  },
+  beforeUnmount() {
+    SocketioService.disconnect();
   },
 };
 </script>
 
 <template>
-  <main>
-    <p>Hello World</p>
-  </main>
+  <main></main>
 </template>
 
 <style></style>

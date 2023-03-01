@@ -6,8 +6,6 @@ class SocketioService {
 
   setupSocketConnection() {
     this.socket = io('http://localhost:3000');
-    console.log('try to init socket');
-    this.socket.emit('my message', 'Hello there from Vue.');
   }
 
   disconnect() {

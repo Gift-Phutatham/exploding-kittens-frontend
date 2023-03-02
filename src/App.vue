@@ -1,20 +1,21 @@
 <template>
   <v-app>
     <v-main>
-      <HomePage />
+      <HomeComponent />
+      <!-- TODO: Pass socket to components(?) -->
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import HomePage from './components/HomePage.vue';
+import HomeComponent from './components/HomeComponent.vue';
 import SocketioService from './services/socketio.service.js';
 
 export default defineComponent({
   name: 'App',
   components: {
-    HomePage,
+    HomeComponent,
   },
   created() {
     SocketioService.setupSocketConnection();

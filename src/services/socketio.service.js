@@ -10,6 +10,9 @@ class SocketioService {
 
   startGame(body) {
     this.socket.emit('start game', body);
+    this.socket.on('start game', () => {
+      console.log(`>>>>> ${body.name}, ${body.gameId}`);
+    });
   }
 
   disconnect() {

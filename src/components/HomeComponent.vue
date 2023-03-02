@@ -1,9 +1,11 @@
 <template>
   <v-container>
     <v-col class="text-center">
-      <v-text-field label="Name *" v-model="name"></v-text-field>
-      <v-text-field label="Game ID *" v-model="gameId"></v-text-field>
-      <v-btn @click="startGame"> Start the Game </v-btn>
+      <v-form @submit.prevent="startGame">
+        <v-text-field label="Name *" v-model="name"></v-text-field>
+        <v-text-field label="Game ID *" v-model="gameId"></v-text-field>
+        <v-btn type="submit"> Start the Game </v-btn>
+      </v-form>
     </v-col>
   </v-container>
 </template>
@@ -13,7 +15,7 @@ import { defineComponent } from 'vue';
 import SocketioService from '../services/socketio.service.js';
 
 export default defineComponent({
-  name: 'HomePage',
+  name: 'HomeComponent',
   data() {
     return {
       name: '',
@@ -22,11 +24,12 @@ export default defineComponent({
   },
   methods: {
     startGame() {
-      const body = {
+      SocketioService.startGame({
         name: this.name,
         gameId: this.gameId,
-      };
-      SocketioService.startGame(body);
+      });
+      this.name = '';
+      this.gameId = '';
     },
   },
 });

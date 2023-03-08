@@ -37,6 +37,8 @@ import SocketioService from "../services/socketio.service.js";
     components: {},
     data() {
       return {
+        userName: "",
+        userCurrentRoom: "",
         token: "",
         inputNameText: "",
         inputRoomText: "",
@@ -58,19 +60,21 @@ import SocketioService from "../services/socketio.service.js";
       },
       joinRoom(){
         // SocketioService.setupSocketConnection(this.token);
-        SocketioService.subscribeToMessages(this.inputNameText, this.inputRoomText, (err, data) => {
+        this.userName = this.inputNameText;
+        this.userCurrentRoom = this.inputRoomText;
+        SocketioService.subscribeToMessages(this.userName, this.userCurrentRoom, (err, data) => {
           console.log("data is:" + data);
           this.messages.push(data);
         });
-        SocketioService.joinRoom(this.inputNameText, this.inputRoomText, (cb) => {
+        SocketioService.joinRoom(this.userName, this.userCurrentRoom, (cb) => {
             console.log(cb)
         });
         console.log(this.messages);
         // SocketioService.joinRoom({name: this.inputNameText, room: this.inputRoomText});
       },
       submitMessage() {
-        const CHAT_ROOM = this.inputRoomText;
-        const name = this.inputNameText;
+        const CHAT_ROOM = this.userCurrentRoom;
+        const name = this.userName;
         const message = this.inputMessageText;
         SocketioService.sendMessage({ name, message, CHAT_ROOM}, (cb) => {
           // callback is acknowledgement from server

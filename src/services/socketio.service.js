@@ -31,8 +31,8 @@ class SocketioService {
     this.socket.emit('message', { name, message, roomID }, cb);
   }
 
-  sendMessage({name, message, roomID}, cb) {
-    if (this.socket) this.socket.emit('message', { name, message, roomID }, cb);
+  sendMessage({name, message, CHAT_ROOM}, cb) {
+    if (this.socket) this.socket.emit('message', { name, message, CHAT_ROOM }, cb);
   }
 
   startGame(body) {

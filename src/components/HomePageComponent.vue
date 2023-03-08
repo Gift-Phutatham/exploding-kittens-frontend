@@ -1,8 +1,8 @@
 <template>
     <div class="App">
       <form @submit.prevent="submitToken">
-        <input type="text" placeholder="Enter token" v-model="inputNameText" />
-        <input type="text" placeholder="Enter token" v-model="inputRoomText" />
+        <input type="text" placeholder="user" v-model="inputNameText" />
+        <input type="text" placeholder="roomID" v-model="inputRoomText" />
         <button type="submit">Submit</button>
       </form>
       <div class="box">
@@ -21,6 +21,7 @@
   </template>
   
   <script>
+
   import SocketioService from '../services/socketio.service.js';
   
   // static data only for demo purposes, in real world scenario, this would be already stored on client
@@ -43,22 +44,29 @@
       };
     },
     methods: {
-      submitToken() {
-        SocketioService.setupSocketConnection({name: this.inputMessageText,  roomID: this.inputRoomText});
-        SocketioService.subscribeToMessages((err, data) => {
+      submitToken() { 
+        SocketioService.setupSocketConnection({name: this.inputNameText});
+        SocketioService.subscribeToMessages(this.inputRoomText, (err, data) => {
           console.log(data);
           this.messages.push(data);
         });
+        SocketioService.subscribeToRoom(this.inputRoomText, (err, data) => {
+            console.log("FROM room chanel" + data);
+        }); // why this line isn't called ?????
       },
       submitMessage() {
+        console.log(this.inputRoomText);
         const CHAT_ROOM = this.inputRoomText;
         const message = this.inputMessageText;
-        SocketioService.sendMessage({message, roomName: CHAT_ROOM}, cb => {
+        SocketioService.sendMessage({message, roomID: CHAT_ROOM}, cb => {
           // callback is acknowledgement from server
           console.log(cb);
           this.messages.push({
+            // message,
+            // ...SENDER
             message,
-            ...SENDER
+            id: "123", // mock ID
+            name: this.inputNameText 
           });
           // clear the input after the message is sent
           this.inputMessageText = '';

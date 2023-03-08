@@ -1,23 +1,24 @@
-<script lang="ts">
-import SocketioService from './services/socketio.service.js';
-
-export default {
-  name: 'App',
-  data() {
-    return {};
-  },
-  methods: {},
-  created() {
-    SocketioService.setupSocketConnection();
-  },
-  beforeUnmount() {
-    SocketioService.disconnect();
-  },
-};
-</script>
-
 <template>
-  <main></main>
+      <!-- <HomeComponent /> -->
+      <HomePageComponent/>
+      <!-- TODO: Pass socket to components(?) -->
 </template>
 
-<style></style>
+<script lang="ts">
+import { defineComponent } from 'vue';
+// import HomeComponent from './components/HomeComponent.vue';
+import HomePageComponent from './components/HomePageComponent.vue';
+// import SocketioService from './services/socketio.service.js';
+export default defineComponent({
+  name: 'App',
+  components: {
+    HomePageComponent
+  },
+  // created() {
+  //   SocketioService.setupSocketConnection();
+  // },
+  // beforeUnmount() {
+  //   SocketioService.disconnect();
+  // },
+});
+</script>

@@ -12,7 +12,7 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint . --fix",
     "format": "prettier --write .",
-    "configure-husky": "npx husky install && npx husky add .husky/pre-commit \"npx --no-install lint-staged\""
+    "configure-husky": "npx husky install"
   },
   "lint-staged": {
     "**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts}": "npm run lint",

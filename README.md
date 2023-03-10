@@ -1,6 +1,6 @@
 # Exploding Kittens Frontend
 
-## How to Develop the Project
+## How to Start Developing the Project
 
 ```
 npm install

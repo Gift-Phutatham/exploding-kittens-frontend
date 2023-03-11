@@ -15,7 +15,7 @@
         </div>
       <div class="box">
         <div class="messages">
-          <div v-for="user in messages" :key="user.id">
+          <div v-for="user in messages" :key="user.name">
             {{user.name}}: {{user.message}}
           </div>
         </div>
@@ -63,13 +63,10 @@
         const CHAT_ROOM = this.inputRoomText;
         const message = this.inputMessageText;
         SocketioService.sendMessage({message, roomID: CHAT_ROOM}, cb => {
-          // callback is acknowledgement from server
+
           console.log(cb);
           this.messages.push({
-            // message,
-            // ...SENDER
             message,
-            id: "123", // mock ID
             name: this.inputNameText 
           });
           // clear the input after the message is sent

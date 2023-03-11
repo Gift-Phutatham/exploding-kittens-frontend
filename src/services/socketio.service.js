@@ -19,7 +19,6 @@ class SocketioService {
 
   subscribeToMessages(roomID, cb) {
     if (!this.socket) return(true);
-    this.socket.emit('join room', roomID); // join the specific room
     this.socket.on('message', msg => {
       console.log('Room event received!');
       return cb(null, msg);
@@ -30,8 +29,8 @@ class SocketioService {
   subscribeToRoom(roomID, cb) {
     if (!this.socket) return(true);
     console.log("sugar sugar RUNEEEE!!")
-    // this.socket.emit('join room', roomID); // join the specific room
-    this.socket.on('check room', msg => {
+    this.socket.emit('join room', roomID); // join the specific room
+    this.socket.on('join room', msg => {
       console.log('Room event received!');
       return cb(null, msg);
     });

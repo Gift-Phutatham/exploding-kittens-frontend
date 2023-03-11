@@ -5,6 +5,14 @@
         <input type="text" placeholder="roomID" v-model="inputRoomText" />
         <button type="submit">Submit</button>
       </form>
+      <div class="players">
+        <div class="player">
+          <h1> Player {{users.length}}/4</h1>
+          <div v-for="user in users" :key="user">
+            {{user}}
+          </div>
+        </div>
+        </div>
       <div class="box">
         <div class="messages">
           <div v-for="user in messages" :key="user.id">
@@ -24,12 +32,6 @@
 
   import SocketioService from '../services/socketio.service.js';
   
-  // static data only for demo purposes, in real world scenario, this would be already stored on client
-  const SENDER = {
-    id: "123",
-    name: "John Doe",
-  };
-  
   export default {
     name: 'App',
     components: {
@@ -40,19 +42,21 @@
         inputMessageText: '',
         inputNameText: '',
         inputRoomText: '',
-        messages: []
+        messages: [],
+        users: [],
       };
     },
     methods: {
       submitToken() { 
-        SocketioService.setupSocketConnection({name: this.inputNameText});
+        SocketioService.setupSocketConnection({name: this.inputNameText, roomID: this.inputRoomText});
         SocketioService.subscribeToMessages(this.inputRoomText, (err, data) => {
           console.log(data);
           this.messages.push(data);
         });
         SocketioService.subscribeToRoom(this.inputRoomText, (err, data) => {
-            console.log("FROM room chanel" + data);
-        }); // why this line isn't called ?????
+            this.users = data;
+            console.log(this.users);
+        });
       },
       submitMessage() {
         console.log(this.inputRoomText);

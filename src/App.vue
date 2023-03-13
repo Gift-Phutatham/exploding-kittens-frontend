@@ -1,7 +1,7 @@
 <template>
-      <!-- <HomeComponent /> -->
-      <HomePageComponent/>
-      <!-- TODO: Pass socket to components(?) -->
+  <!-- <HomeComponent /> -->
+  <HomePageComponent />
+  <!-- TODO: Pass socket to components(?) -->
 </template>
 
 <script lang="ts">
@@ -12,7 +12,7 @@ import HomePageComponent from './components/HomePageComponent.vue';
 export default defineComponent({
   name: 'App',
   components: {
-    HomePageComponent
+    HomePageComponent,
   },
   // created() {
   //   SocketioService.setupSocketConnection();

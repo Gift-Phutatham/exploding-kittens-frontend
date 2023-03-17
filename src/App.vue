@@ -1,3 +1,9 @@
+<template>
+  <p>hi</p>
+</template>
+
+<style></style>
+
 <script lang="ts">
 import SocketioService from './services/socketio.service.js';
 
@@ -15,9 +21,3 @@ export default {
   },
 };
 </script>
-
-<template>
-  <main></main>
-</template>
-
-<style></style>

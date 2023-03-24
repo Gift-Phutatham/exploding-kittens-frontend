@@ -23,6 +23,7 @@
         <button type="submit">Submit</button>
       </form>
     </div>
+    <button @click="startgame">click here</button>
   </div>
 </template>
 
@@ -63,13 +64,13 @@ export default {
       const message = this.inputMessageText;
       SocketioService.sendMessage({ message, roomID: CHAT_ROOM }, (cb) => {
         console.log(cb);
-        this.messages.push({
-          message,
-          name: this.inputNameText,
-        });
-        // clear the input after the message is sent
         this.inputMessageText = '';
       });
+    },
+    startgame() {
+      const CHAT_ROOM = this.inputRoomText;
+      SocketioService.startGame(CHAT_ROOM);
+      console.log(CHAT_ROOM);
     },
   },
   beforeUnmount() {

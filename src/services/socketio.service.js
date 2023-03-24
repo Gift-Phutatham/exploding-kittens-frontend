@@ -6,6 +6,7 @@ class SocketioService {
 
   setupSocketConnection(token) {
     this.socket = io('http://localhost:3000', {
+      // TODO: Fix this hardcade port address
       auth: {
         token,
       },
@@ -25,10 +26,8 @@ class SocketioService {
     });
   }
 
-  // this method still isn't used
   subscribeToRoom(roomID, cb) {
     if (!this.socket) return true;
-    console.log('sugar sugar RUNEEEE!!');
     this.socket.emit('join room', roomID); // join the specific room
     this.socket.on('join room', (msg) => {
       console.log('Room event received!');
@@ -38,6 +37,10 @@ class SocketioService {
 
   sendMessage({ message, roomID }, cb) {
     if (this.socket) this.socket.emit('message', { message, roomID }, cb);
+  }
+
+  startGame(roomID) {
+    if (this.socket) this.socket.emit('game start', roomID);
   }
 
   disconnect() {

@@ -1,5 +1,5 @@
 <template>
-  <p>hi</p>
+  <RouterView></RouterView>
 </template>
 
 <style></style>
@@ -21,3 +21,5 @@ export default {
   },
 };
 </script>
+
+<style lang="css"></style>

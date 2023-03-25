@@ -1,23 +1,26 @@
 <template>
-  <p>hi</p>
+  <v-app>
+    <v-main>
+      <Home></Home>
+    </v-main>
+  </v-app>
 </template>
 
-<style></style>
-
 <script lang="ts">
-import SocketioService from './services/socketio.service.js';
+import { defineComponent } from 'vue';
+import Home from './views/HomeView.vue';
 
-export default {
+export default defineComponent({
   name: 'App',
+
+  components: {
+    Home,
+  },
+
   data() {
-    return {};
+    return {
+      //
+    };
   },
-  methods: {},
-  created() {
-    SocketioService.setupSocketConnection();
-  },
-  beforeUnmount() {
-    SocketioService.disconnect();
-  },
-};
+});
 </script>

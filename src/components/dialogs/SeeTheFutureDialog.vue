@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  allCards: Array<Object>;
+  allCards: Object;
   topThreeCards: Array<string>;
 }>();
 </script>
@@ -25,14 +25,13 @@ defineProps<{
               md="4"
               lg="4"
             >
-              {{ card }}
-              <CardComponent :name="card" description="Hello World" color="black"> </CardComponent>
-              <!-- <CardComponent
+              <!-- <CardComponent :name="card" description="hello world" color="black"> </CardComponent> -->
+              <CardComponent
                 :name="card"
                 :description="allCards[card].description"
                 :color="allCards[card].color"
               >
-              </CardComponent> -->
+              </CardComponent>
               <div class="text-center mt-3">
                 <p v-if="index == 0">Top</p>
                 <p v-if="index == topThreeCards.length - 1">Bottom</p>

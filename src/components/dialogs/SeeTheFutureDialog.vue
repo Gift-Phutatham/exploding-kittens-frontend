@@ -26,7 +26,7 @@ defineProps<{
             >
               <CardComponent :name="key" :description="card.description" :color="card.color">
               </CardComponent>
-              <div class="text-center mt-3">
+              <div class="d-none d-md-flex d-lg-flex d-xl-flex justify-center mt-3">
                 <p v-if="index == 0">Top</p>
                 <p v-if="index == Object.keys(topThreeCards).length - 1">Bottom</p>
               </div>

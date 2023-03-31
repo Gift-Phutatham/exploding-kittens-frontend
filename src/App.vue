@@ -1,5 +1,5 @@
 <template>
-  <SeeTheFutureDialog :allCards="allCards" :topThreeCards="topThreeCards"></SeeTheFutureDialog>
+  <SeeTheFutureDialog :topThreeCards="topThreeCards"></SeeTheFutureDialog>
 </template>
 
 <script>
@@ -13,27 +13,11 @@ export default {
   },
   data() {
     return {
-      allCards: {},
-      // topThreeCards: {
-      //   'Exploding Kitten': {
-      //     description: 'Show this card immediately',
-      //     color: '#312F27',
-      //   },
-      //   'Defuse': {
-      //     description: 'Put your last drawn card back into the deck',
-      //     color: '#98C243',
-      //   },
-      //   'Attack': {
-      //     description:
-      //       'End your turn without drawing a card. Force the next player to take two turns.',
-      //     color: '#D48336',
-      //   },
-      // },
-      topThreeCards: ['Exploding Kitten', 'Defuse', 'Attack'],
+      topThreeCards: ['Exploding Kitten', 'Defuse', 'Attack'].reduce(
+        (accumulator, value) => ({ ...accumulator, [value]: allCardsJson[value] }),
+        {},
+      ),
     };
-  },
-  mounted() {
-    this.allCards = allCardsJson;
   },
 };
 </script>

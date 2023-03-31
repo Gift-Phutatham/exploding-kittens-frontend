@@ -1,7 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  allCards: Object;
-  topThreeCards: Array<string>;
+  topThreeCards: Object;
 }>();
 </script>
 
@@ -17,24 +16,19 @@ defineProps<{
         <v-container>
           <v-row>
             <v-col
-              v-for="(card, index) in topThreeCards"
-              :key="index"
+              v-for="(card, key, index) in topThreeCards"
+              :key="key"
               cols="12"
               xs="12"
               sm="12"
               md="4"
               lg="4"
             >
-              <!-- <CardComponent :name="card" description="hello world" color="black"> </CardComponent> -->
-              <CardComponent
-                :name="card"
-                :description="allCards[card].description"
-                :color="allCards[card].color"
-              >
+              <CardComponent :name="key" :description="card.description" :color="card.color">
               </CardComponent>
               <div class="text-center mt-3">
                 <p v-if="index == 0">Top</p>
-                <p v-if="index == topThreeCards.length - 1">Bottom</p>
+                <p v-if="index == Object.keys(topThreeCards).length - 1">Bottom</p>
               </div>
             </v-col>
           </v-row>

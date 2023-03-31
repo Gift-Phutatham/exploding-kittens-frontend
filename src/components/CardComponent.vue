@@ -7,9 +7,9 @@ defineProps<{
 </script>
 
 <template>
-  <v-card class="mx-auto" max-width="200" variant="outlined">
+  <v-card class="mx-auto" max-width="200" height="297" variant="outlined">
     <v-container>
-      <v-card variant="outlined" :color="color">
+      <v-card height="256" variant="outlined" :color="color">
         <v-card-item>
           <div class="text-center text-grey-darken-3 my-10">
             <div class="text-h6">

@@ -1,23 +1,17 @@
 <template>
-  <SeeTheFutureDialog :topThreeCards="topThreeCards"></SeeTheFutureDialog>
+  <v-app>
+    <v-main>
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import allCardsJson from './components/allCards.json';
-import SeeTheFutureDialog from './components/dialogs/SeeTheFutureDialog.vue';
-
 export default {
   name: 'App',
-  components: {
-    SeeTheFutureDialog,
-  },
-  data() {
-    return {
-      topThreeCards: ['Exploding Kitten', 'Defuse', 'Attack'].reduce(
-        (accumulator, value) => ({ ...accumulator, [value]: allCardsJson[value] }),
-        {},
-      ),
-    };
-  },
+
+  data: () => ({
+    //
+  }),
 };
 </script>

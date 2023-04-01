@@ -30,13 +30,24 @@ defineProps<{
             lg="7"
             xl="7"
           >
-            TODO
+            <v-row class="text-justify">
+              <div class="text-body-1">
+                You have an Attack card! Please choose if you want to stack the card to the next
+                player or draw.
+              </div>
+              <v-radio-group class="mt-3" v-model="value" :color="card[cardName].color">
+                <v-radio label="Stack the Attack card" value="stack"></v-radio>
+                <v-radio label="Draw" value="draw"></v-radio>
+              </v-radio-group>
+            </v-row>
           </v-col>
         </v-row>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn :color="card[cardName].color" @click="openDialog = false">Close</v-btn>
+        <v-btn :color="card[cardName].color" :disabled="!value" @click="openDialog = false"
+          >Close</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -55,6 +66,7 @@ export default defineComponent({
     return {
       openDialog: true,
       cardName: 'Attack',
+      value: false,
     };
   },
 });

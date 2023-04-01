@@ -66,7 +66,7 @@ export default defineComponent({
     return {
       openDialog: true,
       cardName: 'Attack',
-      value: false,
+      value: '',
     };
   },
 });

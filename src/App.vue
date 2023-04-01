@@ -1,22 +1,17 @@
 <template>
-  <AttackDialog :card="card"></AttackDialog>
+  <v-app>
+    <v-main>
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import allCardsJson from './components/allCards.json';
-import AttackDialog from './components/dialogs/AttackDialog.vue';
-
 export default {
   name: 'App',
-  components: {
-    AttackDialog,
-  },
-  data() {
-    return {
-      card: {
-        Attack: allCardsJson['Attack'],
-      },
-    };
-  },
+
+  data: () => ({
+    //
+  }),
 };
 </script>

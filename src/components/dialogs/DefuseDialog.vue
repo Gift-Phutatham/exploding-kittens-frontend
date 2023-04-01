@@ -14,6 +14,13 @@ defineProps<{
       </v-toolbar>
       <v-card-text class="text-center mx-3">
         <v-row>
+          <v-col cols="12" xs="12" sm="12" md="5" lg="5" xl="5">
+            <CardComponent
+              :name="cardName"
+              :description="card[cardName].description"
+              :color="card[cardName].color"
+            ></CardComponent>
+          </v-col>
           <v-col
             class="d-flex align-center justify-center text-h6 font-weight-regular"
             cols="12"
@@ -24,13 +31,6 @@ defineProps<{
             xl="7"
           >
             You got a Defuse card. You SURVIVE!
-          </v-col>
-          <v-col cols="12" xs="12" sm="12" md="5" lg="5" xl="5">
-            <CardComponent
-              :name="cardName"
-              :description="card[cardName].description"
-              :color="card[cardName].color"
-            ></CardComponent>
           </v-col>
         </v-row>
       </v-card-text>

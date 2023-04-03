@@ -1,7 +1,7 @@
 <template>
-  <v-card class="mx-auto" max-width="150" height="234" variant="outlined">
+  <v-card width="200" height="290">
     <v-container>
-      <v-card height="200" variant="outlined" color="#841618">
+      <v-card height="256" variant="outlined" color="#841618">
         <v-card-item
           class="d-flex align-center justify-center h-100 text-center text-grey-darken-3"
         >

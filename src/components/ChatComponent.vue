@@ -20,7 +20,7 @@
         hide-details
         density="compact"
         append-inner-icon="mdi-send"
-        @click:append-inner="onClick"
+        @click:append-inner="sendMessage"
       ></v-text-field>
     </v-form>
   </v-card>
@@ -33,45 +33,13 @@ export default defineComponent({
   name: 'ChatComponent',
   data: () => ({
     message: '',
-    chats: [
-      {
-        name: 'Player 1 Player 1 Player 1 Player 1 Player 1 Player 1 Player 1',
-        message: 'hello world hello world hello world hello world hello world hello world',
-      },
-      {
-        name: 'Player 1',
-        message: 'hello world',
-      },
-      {
-        name: 'Player 1',
-        message: 'hello world',
-      },
-      {
-        name: 'Player 1',
-        message: 'hello world',
-      },
-      {
-        name: 'Player 1',
-        message: 'hello world',
-      },
-      {
-        name: 'Player 1',
-        message: 'hello world',
-      },
-      {
-        name: 'Player 1',
-        message: 'hello world',
-      },
-      {
-        name: 'Player 1',
-        message: 'hello world',
-      },
-    ],
+    chats: [],
   }),
   methods: {
-    onClick() {
+    sendMessage() {
       if (this.message) {
         console.log(this.message);
+        this.message = '';
       }
     },
   },

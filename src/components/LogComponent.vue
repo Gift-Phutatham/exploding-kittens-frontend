@@ -1,7 +1,7 @@
 <template>
   <v-card class="mx-auto" max-width="250">
     <v-banner class="text-center text-subtitle-1 py-2"> Game Log </v-banner>
-    <v-card class="overflow-y-auto" height="300">
+    <v-card class="d-flex flex-column-reverse overflow-y-auto" height="300">
       <v-card-item class="text-justify text-caption">
         <div v-for="(log, index) in logs" :key="index">
           {{ log }}

@@ -114,11 +114,8 @@ export default {
       this.selectedIndex = index;
     },
     act(card: string) {
-      switch (card) {
-        case 'Favor': {
-          this.showFavorDialog = true;
-          break;
-        }
+      if (card === 'Favor') {
+        this.showFavorDialog = true;
       }
     },
     playCard() {

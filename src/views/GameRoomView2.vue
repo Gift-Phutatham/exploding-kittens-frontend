@@ -97,7 +97,7 @@ export default {
       this.selectedIndex = index;
     },
     playCard() {
-      if (this.selectedIndex && this.selectedIndex !== -1) {
+      if (this.selectedIndex !== -1) {
         alert(this.cards[this.selectedIndex]);
       }
     },
@@ -116,8 +116,7 @@ export default {
 }
 
 .selected-card {
-  margin-bottom: 50px;
-  border: 3px solid #841618;
   z-index: 1;
+  border: 4px solid #841618;
 }
 </style>

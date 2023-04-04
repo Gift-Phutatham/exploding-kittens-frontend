@@ -1,18 +1,25 @@
 <template>
-  <div class="bg-image d-flex justify-center">
-    <v-row>
-      <v-col cols="10">
-        <div class="d-flex flex-column h-100">
-          <v-row class="d-flex justify-center align-end">
-            <DrawPileComponent></DrawPileComponent>
-            <CardComponent
-              class="ml-3"
-              :name="latestCard"
-              :description="allCards[latestCard].description"
-              :color="allCards[latestCard].color"
-            ></CardComponent>
-          </v-row>
-          <v-row class="d-flex justify-center align-end mb-4">
+  <div class="bg-image">
+    <div class="container">
+      <v-row>
+        <v-col cols="10">
+          <div class="d-flex justify-center align-start">
+            <v-sheet> start </v-sheet>
+          </div>
+          <div class="d-flex justify-space-between align-center center">
+            <v-sheet> justify-space-between 1 </v-sheet>
+            <v-row class="d-flex justify-center align-end">
+              <DrawPileComponent></DrawPileComponent>
+              <CardComponent
+                class="ml-3"
+                :name="latestCard"
+                :description="allCards[latestCard].description"
+                :color="allCards[latestCard].color"
+              ></CardComponent>
+            </v-row>
+            <v-sheet> justify-space-between 3 </v-sheet>
+          </div>
+          <div class="d-flex justify-center align-end">
             <v-col cols="1" v-for="(card, index) in cardsInHand" :key="index">
               <CardComponent
                 :disabled="hasDied"
@@ -23,19 +30,19 @@
                 :class="index === selectedIndex ? 'selected-card' : ''"
               ></CardComponent>
             </v-col>
-          </v-row>
-        </div>
-      </v-col>
-      <v-col class="d-flex flex-column justify-space-evenly" cols="2">
-        <ChatComponent></ChatComponent>
-        <LogComponent></LogComponent>
-      </v-col>
-    </v-row>
-    <v-bottom-navigation grow>
-      <EndTurnButton :disabled="hasDied" @click="endTurn"></EndTurnButton>
-      <PlayButton :disabled="hasDied || selectedIndex == -1" @click="playCard"></PlayButton>
-      <ReturnToHomePageButton></ReturnToHomePageButton>
-    </v-bottom-navigation>
+          </div>
+        </v-col>
+        <v-col class="mt-3" cols="2">
+          <ChatComponent></ChatComponent>
+          <LogComponent class="mt-6"></LogComponent>
+        </v-col>
+      </v-row>
+      <v-bottom-navigation grow>
+        <EndTurnButton :disabled="hasDied" @click="endTurn"></EndTurnButton>
+        <PlayButton :disabled="hasDied || selectedIndex == -1" @click="playCard"></PlayButton>
+        <ReturnToHomePageButton></ReturnToHomePageButton>
+      </v-bottom-navigation>
+    </div>
   </div>
   <AttackDialog v-if="showAttackDialog" :card="attackCard" @attack="getAttackValue"></AttackDialog>
   <DefuseDialog v-if="showDefuseDialog" :card="defuseCard"></DefuseDialog>
@@ -221,5 +228,13 @@ export default {
 .selected-card {
   z-index: 1;
   border: medium solid #841618;
+}
+
+.container {
+  margin: 8px;
+}
+
+.center {
+  height: 65%;
 }
 </style>

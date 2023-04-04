@@ -15,6 +15,7 @@
           <v-row class="d-flex justify-center align-end mb-4">
             <v-col cols="1" v-for="(card, index) in cards" :key="index">
               <CardComponent
+                :disabled="hasDied"
                 :name="card"
                 :description="allCards[card].description"
                 :color="allCards[card].color"
@@ -31,11 +32,17 @@
       </v-col>
     </v-row>
     <v-bottom-navigation grow>
-      <EndTurnButton></EndTurnButton>
-      <PlayButton @click="playCard"></PlayButton>
+      <EndTurnButton :disabled="hasDied"></EndTurnButton>
+      <PlayButton :disabled="hasDied" @click="playCard"></PlayButton>
       <ReturnToHomePageButton></ReturnToHomePageButton>
     </v-bottom-navigation>
   </div>
+  <FavorDialog
+    v-if="showFavorDialog"
+    :card="favorCard"
+    :players="players"
+    @favor="getFavorValue"
+  ></FavorDialog>
 </template>
 
 <script lang="ts">
@@ -44,6 +51,7 @@ import LogComponent from '@/components/LogComponent.vue';
 import ChatComponent from '@/components/ChatComponent.vue';
 import CardComponent from '@/components/CardComponent.vue';
 import PlayButton from '@/components/buttons/PlayButton.vue';
+import FavorDialog from '@/components/dialogs/FavorDialog.vue';
 import EndTurnButton from '@/components/buttons/EndTurnButton.vue';
 import DrawPileComponent from '@/components/DrawPileComponent.vue';
 import ReturnToHomePageButton from '@/components/buttons/ReturnToHomePageButton.vue';
@@ -53,6 +61,7 @@ export default {
 
   components: {
     PlayButton,
+    FavorDialog,
     LogComponent,
     EndTurnButton,
     ChatComponent,
@@ -63,6 +72,7 @@ export default {
 
   data() {
     return {
+      hasDied: false,
       allCards: {},
       countDown: 30,
       selectedIndex: -1,
@@ -77,8 +87,15 @@ export default {
         'Attack',
         'Skip',
         'Defuse',
-        'Attack',
+        'Favor',
       ],
+
+      showFavorDialog: false,
+      favorCard: {
+        Favor: allCardsJson['Favor'],
+      },
+      players: ['Player 1', 'Player 2', 'Player 3', 'Player 4'], // TOFIX
+      favorValue: '',
     };
   },
 
@@ -96,10 +113,22 @@ export default {
     selectCard(index: number) {
       this.selectedIndex = index;
     },
+    act(card: string) {
+      switch (card) {
+        case 'Favor': {
+          this.showFavorDialog = true;
+          break;
+        }
+      }
+    },
     playCard() {
       if (this.selectedIndex !== -1) {
-        alert(this.cards[this.selectedIndex]);
+        this.act(this.cards[this.selectedIndex]);
       }
+    },
+    getFavorValue(value: string) {
+      alert(value);
+      this.showFavorDialog = false;
     },
   },
 

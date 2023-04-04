@@ -50,9 +50,7 @@ defineProps<{
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn :color="card[cardName].color" :disabled="!value" @click="openDialog = false">
-          Done
-        </v-btn>
+        <v-btn :color="card[cardName].color" :disabled="!value" @click="submit"> Done </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -73,6 +71,12 @@ export default defineComponent({
       cardName: 'Favor',
       value: '',
     };
+  },
+  methods: {
+    submit() {
+      this.$emit('favor', this.value);
+      this.openDialog = false;
+    },
   },
 });
 </script>

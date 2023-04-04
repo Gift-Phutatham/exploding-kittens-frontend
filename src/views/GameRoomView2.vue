@@ -2,7 +2,7 @@
   <div class="bg-image d-flex justify-center">
     <v-row>
       <v-col cols="10">
-        <v-col class="d-flex flex-column h-100">
+        <div class="d-flex flex-column h-100">
           <v-row class="d-flex justify-center align-end">
             <DrawPileComponent></DrawPileComponent>
             <CardComponent
@@ -12,31 +12,27 @@
               :color="allCards[latestCard].color"
             ></CardComponent>
           </v-row>
-          <v-row class="d-flex align-end">
-            <v-col class="d-flex justify-end mb-16" cols="4">
-              <PlayButton></PlayButton>
-              <EndTurnButton class="ml-3"></EndTurnButton>
-            </v-col>
-            <v-col cols="8">
-              <v-row>
-                <v-col cols="1" v-for="card in cards" :key="card">
-                  <CardComponent
-                    :name="card"
-                    :description="allCards[card].description"
-                    :color="allCards[card].color"
-                  ></CardComponent>
-                </v-col>
-              </v-row>
+          <v-row class="d-flex justify-center align-end">
+            <v-col cols="1" v-for="card in cards" :key="card">
+              <CardComponent
+                :name="card"
+                :description="allCards[card].description"
+                :color="allCards[card].color"
+              ></CardComponent>
             </v-col>
           </v-row>
-        </v-col>
+        </div>
       </v-col>
       <v-col class="d-flex flex-column justify-space-evenly" cols="2">
         <ChatComponent></ChatComponent>
         <LogComponent></LogComponent>
-        <ReturnToHomePageButton></ReturnToHomePageButton>
       </v-col>
     </v-row>
+    <v-bottom-navigation>
+      <PlayButton></PlayButton>
+      <EndTurnButton></EndTurnButton>
+      <ReturnToHomePageButton></ReturnToHomePageButton>
+    </v-bottom-navigation>
   </div>
 </template>
 
@@ -48,7 +44,6 @@ import CardComponent from '@/components/CardComponent.vue';
 import PlayButton from '@/components/buttons/PlayButton.vue';
 import EndTurnButton from '@/components/buttons/EndTurnButton.vue';
 import DrawPileComponent from '@/components/DrawPileComponent.vue';
-import CardInHandComponent from '@/components/CardInHandComponent.vue';
 import ReturnToHomePageButton from '@/components/buttons/ReturnToHomePageButton.vue';
 
 export default {
@@ -61,7 +56,6 @@ export default {
     ChatComponent,
     CardComponent,
     DrawPileComponent,
-    CardInHandComponent,
     ReturnToHomePageButton,
   },
 
@@ -70,7 +64,7 @@ export default {
       allCards: {},
       countDown: 30,
       latestCard: 'See the Future',
-      cards: ['Defuse', 'Attack', 'Skip', 'Nope'],
+      cards: ['Defuse', 'Attack', 'Skip', 'Nope', 'See the Future', 'Defuse', 'Attack', 'Skip'],
     };
   },
 

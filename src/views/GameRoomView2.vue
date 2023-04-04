@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts">
-import allCardsJson from '@/components/allCards.json';
+import allCardsJson from '@/assets/allCards.json';
 import LogComponent from '@/components/LogComponent.vue';
 import ChatComponent from '@/components/ChatComponent.vue';
 import CardComponent from '@/components/CardComponent.vue';

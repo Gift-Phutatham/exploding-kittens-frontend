@@ -1,7 +1,7 @@
 <template>
-  <v-card width="200" height="290">
+  <v-card width="175" height="250">
     <v-container>
-      <v-card height="256" variant="outlined" color="#841618">
+      <v-card height="216" variant="outlined" color="#841618">
         <v-card-item
           class="d-flex align-center justify-center h-100 text-center text-grey-darken-3"
         >

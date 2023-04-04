@@ -5,7 +5,7 @@
         <v-card-item
           class="d-flex align-center justify-center h-100 text-center text-grey-darken-3"
         >
-          <v-img class="mb-1" width="75" src="./src/components/icons/ExplodingKittens.png"></v-img>
+          <v-img class="mb-1" width="75" src="./src/assets/images/ExplodingKittens.png"></v-img>
           Exploding
           <br />
           Kittens

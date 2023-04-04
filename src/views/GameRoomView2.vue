@@ -33,7 +33,7 @@
     </v-row>
     <v-bottom-navigation grow>
       <EndTurnButton :disabled="hasDied" @click="endTurn"></EndTurnButton>
-      <PlayButton :disabled="hasDied" @click="playCard"></PlayButton>
+      <PlayButton :disabled="hasDied || selectedIndex == -1" @click="playCard"></PlayButton>
       <ReturnToHomePageButton></ReturnToHomePageButton>
     </v-bottom-navigation>
   </div>

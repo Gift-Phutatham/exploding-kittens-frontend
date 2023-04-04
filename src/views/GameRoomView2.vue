@@ -13,7 +13,7 @@
             ></CardComponent>
           </v-row>
           <v-row class="d-flex justify-center align-end mb-4">
-            <v-col cols="1" v-for="(card, index) in cards" :key="index">
+            <v-col cols="1" v-for="(card, index) in cardsInHand" :key="index">
               <CardComponent
                 :disabled="hasDied"
                 :name="card"
@@ -77,7 +77,7 @@ export default {
       countDown: 30,
       selectedIndex: -1,
       latestCard: 'See the Future',
-      cards: [
+      cardsInHand: [
         'Defuse',
         'Attack',
         'Skip',
@@ -120,7 +120,7 @@ export default {
     },
     playCard() {
       if (this.selectedIndex !== -1) {
-        this.act(this.cards[this.selectedIndex]);
+        this.act(this.cardsInHand[this.selectedIndex]);
       }
     },
     getFavorValue(value: string) {

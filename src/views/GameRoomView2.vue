@@ -85,8 +85,9 @@ export default {
       allCards: {},
       countDown: 30,
       selectedIndex: -1,
-      latestCard: 'Defuse',
+      latestCard: 'Defuse', // TOFIX
       cardsInHand: [
+        // TOFIX
         'Defuse',
         'Attack',
         'Skip',
@@ -114,6 +115,7 @@ export default {
 
       showSeeTheFutureDialog: false,
       topThreeCards: ['Exploding Kitten', 'Defuse', 'Attack'].reduce(
+        // TOFIX
         (accumulator, value) => ({ ...accumulator, [value]: allCardsJson[value] }),
         {},
       ),

@@ -19,14 +19,12 @@
             </v-col>
             <v-col cols="8">
               <v-row>
-                <v-col cols="2">
-                  <CardInHandComponent :name="latestCard"></CardInHandComponent>
-                </v-col>
-                <v-col cols="2">
-                  <CardInHandComponent :name="latestCard"></CardInHandComponent>
-                </v-col>
-                <v-col cols="2">
-                  <CardInHandComponent :name="latestCard"></CardInHandComponent>
+                <v-col cols="1" v-for="card in cards" :key="card">
+                  <CardComponent
+                    :name="card"
+                    :description="allCards[card].description"
+                    :color="allCards[card].color"
+                  ></CardComponent>
                 </v-col>
               </v-row>
             </v-col>

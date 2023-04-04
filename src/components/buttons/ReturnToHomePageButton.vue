@@ -1,5 +1,8 @@
 <template>
-  <v-btn prepend-icon="mdi-exit-to-app" color="#841618" href="/"> Home Page </v-btn>
+  <v-btn href="/">
+    <v-icon color="#841618">mdi-exit-to-app</v-icon>
+    Home Page
+  </v-btn>
 </template>
 
 <script lang="ts">

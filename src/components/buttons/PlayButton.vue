@@ -1,5 +1,8 @@
 <template>
-  <v-btn prepend-icon="mdi-cards" color="success"> Play </v-btn>
+  <v-btn>
+    <v-icon color="success">mdi-cards</v-icon>
+    Play
+  </v-btn>
 </template>
 
 <script lang="ts">

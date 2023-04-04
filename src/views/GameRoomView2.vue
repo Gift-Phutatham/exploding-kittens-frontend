@@ -12,7 +12,7 @@
               :color="allCards[latestCard].color"
             ></CardComponent>
           </v-row>
-          <v-row class="d-flex justify-center align-end">
+          <v-row class="d-flex justify-center align-end mb-4">
             <v-col cols="1" v-for="card in cards" :key="card">
               <CardComponent
                 :name="card"
@@ -28,9 +28,9 @@
         <LogComponent></LogComponent>
       </v-col>
     </v-row>
-    <v-bottom-navigation>
-      <PlayButton></PlayButton>
+    <v-bottom-navigation grow>
       <EndTurnButton></EndTurnButton>
+      <PlayButton></PlayButton>
       <ReturnToHomePageButton></ReturnToHomePageButton>
     </v-bottom-navigation>
   </div>
@@ -64,7 +64,18 @@ export default {
       allCards: {},
       countDown: 30,
       latestCard: 'See the Future',
-      cards: ['Defuse', 'Attack', 'Skip', 'Nope', 'See the Future', 'Defuse', 'Attack', 'Skip'],
+      cards: [
+        'Defuse',
+        'Attack',
+        'Skip',
+        'Nope',
+        'See the Future',
+        'Defuse',
+        'Attack',
+        'Skip',
+        'Defuse',
+        'Attack',
+      ],
     };
   },
 

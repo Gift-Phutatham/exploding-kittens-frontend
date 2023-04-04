@@ -2,34 +2,36 @@
   <div class="bg-image d-flex justify-center">
     <v-row>
       <v-col cols="10">
-        <v-row class="d-flex justify-center">
-          <DrawPileComponent></DrawPileComponent>
-          <CardComponent
-            class="ml-3"
-            :name="latestCard"
-            :description="allCards[latestCard].description"
-            :color="allCards[latestCard].color"
-          ></CardComponent>
-        </v-row>
-        <v-row class="d-flex justify-center mt-16">
-          <EndTurnButton></EndTurnButton>
-          <CardComponent
-            :name="latestCard"
-            :description="allCards[latestCard].description"
-            :color="allCards[latestCard].color"
-          ></CardComponent>
-          <CardComponent
-            :name="latestCard"
-            :description="allCards[latestCard].description"
-            :color="allCards[latestCard].color"
-          ></CardComponent>
-          <CardComponent
-            :name="latestCard"
-            :description="allCards[latestCard].description"
-            :color="allCards[latestCard].color"
-          ></CardComponent>
-          <PlayButton></PlayButton>
-        </v-row>
+        <v-col class="d-flex flex-column h-100">
+          <v-row class="d-flex justify-center align-end">
+            <DrawPileComponent></DrawPileComponent>
+            <CardComponent
+              class="ml-3"
+              :name="latestCard"
+              :description="allCards[latestCard].description"
+              :color="allCards[latestCard].color"
+            ></CardComponent>
+          </v-row>
+          <v-row class="d-flex align-end">
+            <v-col class="d-flex justify-end mb-16" cols="4">
+              <PlayButton></PlayButton>
+              <EndTurnButton class="ml-3"></EndTurnButton>
+            </v-col>
+            <v-col cols="8">
+              <v-row>
+                <v-col cols="2">
+                  <CardInHandComponent :name="latestCard"></CardInHandComponent>
+                </v-col>
+                <v-col cols="2">
+                  <CardInHandComponent :name="latestCard"></CardInHandComponent>
+                </v-col>
+                <v-col cols="2">
+                  <CardInHandComponent :name="latestCard"></CardInHandComponent>
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-col>
       </v-col>
       <v-col class="d-flex flex-column justify-space-evenly" cols="2">
         <ChatComponent></ChatComponent>
@@ -48,6 +50,7 @@ import CardComponent from '@/components/CardComponent.vue';
 import PlayButton from '@/components/buttons/PlayButton.vue';
 import EndTurnButton from '@/components/buttons/EndTurnButton.vue';
 import DrawPileComponent from '@/components/DrawPileComponent.vue';
+import CardInHandComponent from '@/components/CardInHandComponent.vue';
 import ReturnToHomePageButton from '@/components/buttons/ReturnToHomePageButton.vue';
 
 export default {
@@ -60,6 +63,7 @@ export default {
     ChatComponent,
     CardComponent,
     DrawPileComponent,
+    CardInHandComponent,
     ReturnToHomePageButton,
   },
 

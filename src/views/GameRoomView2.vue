@@ -13,11 +13,13 @@
             ></CardComponent>
           </v-row>
           <v-row class="d-flex justify-center align-end mb-4">
-            <v-col cols="1" v-for="card in cards" :key="card">
+            <v-col cols="1" v-for="(card, index) in cards" :key="index">
               <CardComponent
                 :name="card"
                 :description="allCards[card].description"
                 :color="allCards[card].color"
+                @click="selectCard(index)"
+                :class="index === selectedIndex ? 'selected-card' : ''"
               ></CardComponent>
             </v-col>
           </v-row>
@@ -30,7 +32,7 @@
     </v-row>
     <v-bottom-navigation grow>
       <EndTurnButton></EndTurnButton>
-      <PlayButton></PlayButton>
+      <PlayButton @click="playCard"></PlayButton>
       <ReturnToHomePageButton></ReturnToHomePageButton>
     </v-bottom-navigation>
   </div>
@@ -63,6 +65,7 @@ export default {
     return {
       allCards: {},
       countDown: 30,
+      selectedIndex: -1,
       latestCard: 'See the Future',
       cards: [
         'Defuse',
@@ -90,6 +93,14 @@ export default {
         this.countDown = 30;
       }
     },
+    selectCard(index: number) {
+      this.selectedIndex = index;
+    },
+    playCard() {
+      if (this.selectedIndex && this.selectedIndex !== -1) {
+        alert(this.cards[this.selectedIndex]);
+      }
+    },
   },
 
   created() {
@@ -102,5 +113,11 @@ export default {
 <style scoped>
 .bg-image {
   background-image: url('@/assets/background/gameroom.jpg');
+}
+
+.selected-card {
+  margin-bottom: 50px;
+  border: 3px solid #841618;
+  z-index: 1;
 }
 </style>

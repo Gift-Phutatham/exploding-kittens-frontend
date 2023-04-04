@@ -16,7 +16,7 @@ defineProps<{
       </v-toolbar>
       <v-card-text class="text-center mx-3">
         <v-row>
-          <v-col cols="12" xs="12" sm="12" md="5" lg="5" xl="5">
+          <v-col cols="12" xs="12" sm="12" md="4" lg="4" xl="4" class="d-flex justify-center">
             <CardComponent
               :name="cardName"
               :description="card[cardName].description"
@@ -29,9 +29,9 @@ defineProps<{
             cols="12"
             xs="12"
             sm="12"
-            md="7"
-            lg="7"
-            xl="7"
+            md="8"
+            lg="8"
+            xl="8"
           >
             <v-row>
               <v-col class="text-justify">

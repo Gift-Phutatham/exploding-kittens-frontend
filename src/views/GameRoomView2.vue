@@ -4,10 +4,10 @@
       <v-row>
         <v-col cols="10">
           <div class="d-flex justify-center align-start">
-            <v-sheet> start </v-sheet>
+            <v-sheet> Player 1 </v-sheet>
           </div>
           <div class="d-flex justify-space-between align-center center">
-            <v-sheet> justify-space-between 1 </v-sheet>
+            <v-sheet> Player 2 </v-sheet>
             <v-row class="d-flex justify-center align-end">
               <DrawPileComponent></DrawPileComponent>
               <CardComponent
@@ -17,7 +17,7 @@
                 :color="allCards[latestCard].color"
               ></CardComponent>
             </v-row>
-            <v-sheet> justify-space-between 3 </v-sheet>
+            <v-sheet> Player 3 </v-sheet>
           </div>
           <div class="d-flex justify-center align-end">
             <v-col cols="1" v-for="(card, index) in cardsInHand" :key="index">

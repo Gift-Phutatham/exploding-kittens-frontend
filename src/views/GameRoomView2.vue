@@ -39,6 +39,10 @@
   </div>
   <AttackDialog v-if="showAttackDialog" :card="attackCard" @attack="getAttackValue"></AttackDialog>
   <DefuseDialog v-if="showDefuseDialog" :card="defuseCard"></DefuseDialog>
+  <ExplodingKittenDialog
+    v-if="showExplodedDialog"
+    :card="explodingKittenCard"
+  ></ExplodingKittenDialog>
   <FavorDialog
     v-if="showFavorDialog"
     :card="favorCard"
@@ -63,6 +67,7 @@ import DefuseDialog from '@/components/dialogs/DefuseDialog.vue';
 import EndTurnButton from '@/components/buttons/EndTurnButton.vue';
 import DrawPileComponent from '@/components/DrawPileComponent.vue';
 import SeeTheFutureDialog from '@/components/dialogs/SeeTheFutureDialog.vue';
+import ExplodingKittenDialog from '@/components/dialogs/ExplodingKittenDialog.vue';
 import ReturnToHomePageButton from '@/components/buttons/ReturnToHomePageButton.vue';
 
 export default {
@@ -79,6 +84,7 @@ export default {
     CardComponent,
     DrawPileComponent,
     SeeTheFutureDialog,
+    ExplodingKittenDialog,
     ReturnToHomePageButton,
   },
 
@@ -89,7 +95,7 @@ export default {
       countDown: 30,
       selectedIndex: -1,
       latestCard: 'See the Future', // TOFIX
-      drawnCard: 'Exploded Kitten', // TOFIX
+      toDrawCard: 'Exploded Kitten', // TOFIX
       cardsInHand: [
         // TOFIX
         'Defuse',
@@ -113,6 +119,11 @@ export default {
       showDefuseDialog: false,
       defuseCard: {
         Defuse: allCardsJson['Defuse'],
+      },
+
+      showExplodedDialog: false,
+      explodingKittenCard: {
+        'Exploding Kitten': allCardsJson['Exploding Kitten'],
       },
 
       showFavorDialog: false,
@@ -160,14 +171,20 @@ export default {
       }
     },
     endTurn() {
-      if (this.drawnCard === 'Exploded Kitten' && this.cardsInHand.includes('Defuse')) {
-        // TOFIX
-        this.selectedIndex = -1;
-        this.showDefuseDialog = true;
-        const defuseFirstIndex = this.cardsInHand.indexOf('Defuse');
-        this.cardsInHand.splice(defuseFirstIndex, 1);
-        this.latestCard = 'Defuse';
-        this.drawnCard = 'Attack'; // TOFIX
+      this.selectedIndex = -1;
+      if (this.toDrawCard === 'Exploded Kitten') {
+        if (this.cardsInHand.includes('Defuse')) {
+          this.showDefuseDialog = true;
+          const defuseFirstIndex = this.cardsInHand.indexOf('Defuse');
+          this.cardsInHand.splice(defuseFirstIndex, 1);
+          this.latestCard = 'Defuse';
+          this.toDrawCard = 'Attack'; // TOFIX
+        } else {
+          this.showExplodedDialog = true;
+          this.hasDied = true;
+          this.latestCard = 'Exploding Kitten';
+          this.toDrawCard = 'Attack'; // TOFIX
+        }
       }
     },
 

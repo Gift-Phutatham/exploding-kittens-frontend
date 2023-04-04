@@ -37,12 +37,17 @@
       <ReturnToHomePageButton></ReturnToHomePageButton>
     </v-bottom-navigation>
   </div>
+  <AttackDialog v-if="showAttackDialog" :card="attackCard" @attack="getAttackValue"></AttackDialog>
   <FavorDialog
     v-if="showFavorDialog"
     :card="favorCard"
     :players="players"
     @favor="getFavorValue"
   ></FavorDialog>
+  <SeeTheFutureDialog
+    v-if="showSeeTheFutureDialog"
+    :topThreeCards="topThreeCards"
+  ></SeeTheFutureDialog>
 </template>
 
 <script lang="ts">
@@ -52,8 +57,10 @@ import ChatComponent from '@/components/ChatComponent.vue';
 import CardComponent from '@/components/CardComponent.vue';
 import PlayButton from '@/components/buttons/PlayButton.vue';
 import FavorDialog from '@/components/dialogs/FavorDialog.vue';
+import AttackDialog from '@/components/dialogs/AttackDialog.vue';
 import EndTurnButton from '@/components/buttons/EndTurnButton.vue';
 import DrawPileComponent from '@/components/DrawPileComponent.vue';
+import SeeTheFutureDialog from '@/components/dialogs/SeeTheFutureDialog.vue';
 import ReturnToHomePageButton from '@/components/buttons/ReturnToHomePageButton.vue';
 
 export default {
@@ -62,11 +69,13 @@ export default {
   components: {
     PlayButton,
     FavorDialog,
+    AttackDialog,
     LogComponent,
     EndTurnButton,
     ChatComponent,
     CardComponent,
     DrawPileComponent,
+    SeeTheFutureDialog,
     ReturnToHomePageButton,
   },
 
@@ -76,7 +85,7 @@ export default {
       allCards: {},
       countDown: 30,
       selectedIndex: -1,
-      latestCard: 'See the Future',
+      latestCard: 'Defuse',
       cardsInHand: [
         'Defuse',
         'Attack',
@@ -90,12 +99,24 @@ export default {
         'Favor',
       ],
 
+      showAttackDialog: false,
+      attackCard: {
+        Attack: allCardsJson['Attack'],
+      },
+      attackValue: '',
+
       showFavorDialog: false,
       favorCard: {
         Favor: allCardsJson['Favor'],
       },
       players: ['Player 1', 'Player 2', 'Player 3', 'Player 4'], // TOFIX
       favorValue: '',
+
+      showSeeTheFutureDialog: false,
+      topThreeCards: ['Exploding Kitten', 'Defuse', 'Attack'].reduce(
+        (accumulator, value) => ({ ...accumulator, [value]: allCardsJson[value] }),
+        {},
+      ),
     };
   },
 
@@ -116,12 +137,25 @@ export default {
     act(card: string) {
       if (card === 'Favor') {
         this.showFavorDialog = true;
+      } else if (card === 'See the Future') {
+        this.showSeeTheFutureDialog = true;
       }
     },
     playCard() {
       if (this.selectedIndex !== -1) {
         this.act(this.cardsInHand[this.selectedIndex]);
+        this.cardsInHand.splice(this.selectedIndex, 1);
+        this.selectedIndex = -1;
       }
+    },
+
+    getAttackValue(value: string) {
+      alert(value);
+      if (value === 'stack') {
+        const attackFirstIndex = this.cardsInHand.indexOf('Attack');
+        this.cardsInHand.splice(attackFirstIndex, 1);
+      }
+      this.showAttackDialog = false;
     },
     getFavorValue(value: string) {
       alert(value);
@@ -132,6 +166,10 @@ export default {
   created() {
     this.allCards = allCardsJson;
     this.countDownTimer();
+
+    if (this.latestCard === 'Attack' && this.cardsInHand.includes('Attack')) {
+      this.showAttackDialog = true;
+    }
   },
 };
 </script>

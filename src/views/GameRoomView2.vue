@@ -117,6 +117,6 @@ export default {
 
 .selected-card {
   z-index: 1;
-  border: 4px solid #841618;
+  border: medium solid #841618;
 }
 </style>

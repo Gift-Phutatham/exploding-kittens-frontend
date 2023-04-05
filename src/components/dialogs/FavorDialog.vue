@@ -32,25 +32,13 @@ defineProps<{
             lg="8"
             xl="8"
           >
-            <v-row>
-              <v-col class="text-justify">
-                <div class="text-body-1">
-                  Please choose a player to give you 1 card of their choice.
-                </div>
-                <v-select
-                  class="mt-3"
-                  v-model="value"
-                  :color="card[cardName].color"
-                  :items="players"
-                ></v-select>
-              </v-col>
-            </v-row>
+            A random card from another player is chosen.
           </v-col>
         </v-row>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn :color="card[cardName].color" :disabled="!value" @click="submit"> Done </v-btn>
+        <v-btn :color="card[cardName].color" @click="openDialog = false"> Done </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -69,14 +57,7 @@ export default defineComponent({
     return {
       openDialog: true,
       cardName: 'Favor',
-      value: '',
     };
-  },
-  methods: {
-    submit() {
-      this.$emit('favor', this.value);
-      this.openDialog = false;
-    },
   },
 });
 </script>

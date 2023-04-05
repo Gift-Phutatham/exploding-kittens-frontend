@@ -39,6 +39,7 @@
       </v-row>
       <v-bottom-navigation grow>
         <EndTurnButton :disabled="hasDied" @click="endTurn"></EndTurnButton>
+        <PlayTwoOfAKindButton :disabled="hasDied" @click="playTwoOfAKind"></PlayTwoOfAKindButton>
         <PlayButton :disabled="hasDied || selectedIndex == -1" @click="playCard"></PlayButton>
         <ReturnToHomePageButton></ReturnToHomePageButton>
       </v-bottom-navigation>
@@ -74,6 +75,7 @@ import DefuseDialog from '@/components/dialogs/DefuseDialog.vue';
 import EndTurnButton from '@/components/buttons/EndTurnButton.vue';
 import DrawPileComponent from '@/components/DrawPileComponent.vue';
 import SeeTheFutureDialog from '@/components/dialogs/SeeTheFutureDialog.vue';
+import PlayTwoOfAKindButton from '@/components/buttons/PlayTwoOfAKindButton.vue';
 import ExplodingKittenDialog from '@/components/dialogs/ExplodingKittenDialog.vue';
 import ReturnToHomePageButton from '@/components/buttons/ReturnToHomePageButton.vue';
 
@@ -91,6 +93,7 @@ export default {
     CardComponent,
     DrawPileComponent,
     SeeTheFutureDialog,
+    PlayTwoOfAKindButton,
     ExplodingKittenDialog,
     ReturnToHomePageButton,
   },
@@ -177,6 +180,7 @@ export default {
         this.selectedIndex = -1;
       }
     },
+    playTwoOfAKind() {},
     endTurn() {
       this.selectedIndex = -1;
       if (this.toDrawCard === 'Exploded Kitten') {

@@ -1,29 +1,16 @@
 <template>
   <v-app>
     <v-main>
-      <CreateRoom></CreateRoom>
-      <!-- <Demo></Demo> -->
+      <router-view />
     </v-main>
   </v-app>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
-// import Home from './views/HomeView.vue';
-import CreateRoom from './views/CreateRoomView.vue';
-
-export default defineComponent({
+<script>
+export default {
   name: 'App',
-
-  components: {
-    // Home,
-    CreateRoom,
-  },
-
-  data() {
-    return {
-      //
-    };
-  },
-});
+  data: () => ({
+    //
+  }),
+};
 </script>

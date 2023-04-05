@@ -1,14 +1,14 @@
 <script setup lang="ts">
 defineProps<{
+  cardName: string;
   card: Object;
-  players: Array<string>;
 }>();
 </script>
 
 <template>
   <v-dialog v-model="openDialog" persistent width="750">
     <v-card>
-      <v-toolbar height="80" :color="card[cardName].color">
+      <v-toolbar height="80" :color="themeColor">
         <v-col class="d-flex justify-space-around">
           <v-icon icon="mdi-heart" size="55" color="white"></v-icon>
         </v-col>
@@ -32,13 +32,13 @@ defineProps<{
             lg="8"
             xl="8"
           >
-            A random card from another player is chosen.
+            You got "{{ cardName }}" card from another player.
           </v-col>
         </v-row>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn :color="card[cardName].color" @click="openDialog = false"> Done </v-btn>
+        <v-btn :color="themeColor" @click="openDialog = false"> Done </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -49,14 +49,14 @@ import { defineComponent } from 'vue';
 import CardComponent from '../CardComponent.vue';
 
 export default defineComponent({
-  name: 'FavorDialog',
+  name: 'RandomCardDialog',
   components: {
     CardComponent,
   },
   data() {
     return {
       openDialog: true,
-      cardName: 'Favor',
+      themeColor: '#232321',
     };
   },
 });

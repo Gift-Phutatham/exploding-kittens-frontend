@@ -39,7 +39,10 @@
       </v-row>
       <v-bottom-navigation grow>
         <EndTurnButton :disabled="hasDied" @click="endTurn"></EndTurnButton>
-        <PlayTwoOfAKindButton :disabled="hasDied" @click="playTwoOfAKind"></PlayTwoOfAKindButton>
+        <PlayTwoOfAKindButton
+          :disabled="hasDied || !hasTwoOfAKind"
+          @click="playTwoOfAKind"
+        ></PlayTwoOfAKindButton>
         <PlayButton :disabled="hasDied || selectedIndex == -1" @click="playCard"></PlayButton>
         <ReturnToHomePageButton></ReturnToHomePageButton>
       </v-bottom-navigation>
@@ -51,12 +54,11 @@
     v-if="showExplodedDialog"
     :card="explodingKittenCard"
   ></ExplodingKittenDialog>
-  <FavorDialog
-    v-if="showFavorDialog"
-    :card="favorCard"
-    :players="players"
-    @favor="getFavorValue"
-  ></FavorDialog>
+  <RandomCardDialog
+    v-if="showRandomCardDialog"
+    :cardName="randomCardName"
+    :card="randomCard"
+  ></RandomCardDialog>
   <SeeTheFutureDialog
     v-if="showSeeTheFutureDialog"
     :topThreeCards="topThreeCards"
@@ -69,11 +71,11 @@ import LogComponent from '@/components/LogComponent.vue';
 import ChatComponent from '@/components/ChatComponent.vue';
 import CardComponent from '@/components/CardComponent.vue';
 import PlayButton from '@/components/buttons/PlayButton.vue';
-import FavorDialog from '@/components/dialogs/FavorDialog.vue';
 import AttackDialog from '@/components/dialogs/AttackDialog.vue';
 import DefuseDialog from '@/components/dialogs/DefuseDialog.vue';
 import EndTurnButton from '@/components/buttons/EndTurnButton.vue';
 import DrawPileComponent from '@/components/DrawPileComponent.vue';
+import RandomCardDialog from '@/components/dialogs/RandomCardDialog.vue';
 import SeeTheFutureDialog from '@/components/dialogs/SeeTheFutureDialog.vue';
 import PlayTwoOfAKindButton from '@/components/buttons/PlayTwoOfAKindButton.vue';
 import ExplodingKittenDialog from '@/components/dialogs/ExplodingKittenDialog.vue';
@@ -84,13 +86,13 @@ export default {
 
   components: {
     PlayButton,
-    FavorDialog,
     AttackDialog,
     DefuseDialog,
     LogComponent,
     EndTurnButton,
     ChatComponent,
     CardComponent,
+    RandomCardDialog,
     DrawPileComponent,
     SeeTheFutureDialog,
     PlayTwoOfAKindButton,
@@ -108,16 +110,15 @@ export default {
       toDrawCard: 'Exploded Kitten', // TOFIX
       cardsInHand: [
         // TOFIX
-        'Defuse',
-        'Attack',
+        'TacocaT',
+        'TacocaT',
+        'Cattermelon',
+        'Cattermelon',
         'Skip',
         'Nope',
         'See the Future',
-        'Defuse',
-        'Attack',
-        'Skip',
-        'Defuse',
         'Favor',
+        'Attack',
       ],
 
       showAttackDialog: false,
@@ -136,12 +137,18 @@ export default {
         'Exploding Kitten': allCardsJson['Exploding Kitten'],
       },
 
-      showFavorDialog: false,
-      favorCard: {
-        Favor: allCardsJson['Favor'],
-      },
-      players: ['Player 1', 'Player 2', 'Player 3', 'Player 4'], // TOFIX
-      favorValue: '',
+      hasTwoOfAKind: false,
+      catCards: [
+        'Cattermelon',
+        'Beard Cat',
+        'Hairly Potato Cat',
+        'TacocaT',
+        'Rainbow-Ral Phing Cat',
+      ],
+      showRandomCardDialog: false,
+      randomCardName: '',
+      randomCard: {},
+      firstTwoOfAKind: '',
 
       showSeeTheFutureDialog: false,
       topThreeCards: ['Exploding Kitten', 'Defuse', 'Attack'].reduce(
@@ -166,9 +173,29 @@ export default {
     selectCard(index: number) {
       this.selectedIndex = index;
     },
+    checkAttack() {
+      if (this.latestCard === 'Attack' && this.cardsInHand.includes('Attack')) {
+        this.showAttackDialog = true;
+      }
+    },
+    checkTwoOfAKind() {
+      const catCardsCounts = this.catCards.reduce(
+        (a, catCard) => ({
+          ...a,
+          [catCard]: this.cardsInHand.filter((cardInHand) => cardInHand == catCard).length,
+        }),
+        {},
+      );
+      this.firstTwoOfAKind = this.catCards.find((catCard) => catCardsCounts[catCard] > 1) || '';
+      this.hasTwoOfAKind = this.firstTwoOfAKind !== '';
+    },
     act(card: string) {
       if (card === 'Favor') {
-        this.showFavorDialog = true;
+        this.randomCardName = 'Favor'; // TOFIX
+        this.randomCard = {
+          Favor: allCardsJson['Favor'], // TOFIX
+        };
+        this.showRandomCardDialog = true;
       } else if (card === 'See the Future') {
         this.showSeeTheFutureDialog = true;
       }
@@ -180,7 +207,19 @@ export default {
         this.selectedIndex = -1;
       }
     },
-    playTwoOfAKind() {},
+    playTwoOfAKind() {
+      this.selectedIndex = -1;
+      this.randomCardName = 'Defuse'; // TOFIX
+      this.randomCard = {
+        Defuse: allCardsJson['Defuse'], // TOFIX
+      };
+      this.showRandomCardDialog = true;
+      for (let i = 0; i < 2; i++) {
+        const catIndex = this.cardsInHand.indexOf(this.firstTwoOfAKind);
+        this.cardsInHand.splice(catIndex, 1);
+      }
+      this.checkTwoOfAKind();
+    },
     endTurn() {
       this.selectedIndex = -1;
       if (this.toDrawCard === 'Exploded Kitten') {
@@ -198,28 +237,20 @@ export default {
         }
       }
     },
-
     getAttackValue(value: string) {
-      alert(value);
       if (value === 'stack') {
         const attackFirstIndex = this.cardsInHand.indexOf('Attack');
         this.cardsInHand.splice(attackFirstIndex, 1);
       }
       this.showAttackDialog = false;
     },
-    getFavorValue(value: string) {
-      alert(value);
-      this.showFavorDialog = false;
-    },
   },
 
   created() {
     this.allCards = allCardsJson;
     this.countDownTimer();
-
-    if (this.latestCard === 'Attack' && this.cardsInHand.includes('Attack')) {
-      this.showAttackDialog = true;
-    }
+    this.checkAttack();
+    this.checkTwoOfAKind();
   },
 };
 </script>

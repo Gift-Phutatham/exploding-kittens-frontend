@@ -43,7 +43,12 @@
           :disabled="hasDied || !hasTwoOfAKind"
           @click="playTwoOfAKind"
         ></PlayTwoOfAKindButton>
-        <PlayButton :disabled="hasDied || selectedIndex == -1" @click="playCard"></PlayButton>
+        <PlayButton
+          :disabled="
+            hasDied || selectedIndex == -1 || catCards.includes(cardsInHand[selectedIndex])
+          "
+          @click="playCard"
+        ></PlayButton>
         <ReturnToHomePageButton></ReturnToHomePageButton>
       </v-bottom-navigation>
     </div>

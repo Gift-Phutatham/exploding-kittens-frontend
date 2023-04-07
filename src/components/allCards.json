@@ -1,0 +1,54 @@
+{
+  "Exploding Kitten": {
+    "description": "Show this card immediately",
+    "color": "#312F27"
+  },
+  "Defuse": {
+    "description": "Put your last drawn card back into the deck",
+    "color": "#98C243"
+  },
+  "Attack": {
+    "description": "End your turn without drawing a card. Force the next player to take two turns.",
+    "color": "#D48336"
+  },
+  "Favor": {
+    "description": "One player must give you a card of their choice",
+    "color": "#232321"
+  },
+  "Nope": {
+    "description": "Stop the action of another player. You can play this at any time.",
+    "color": "#9E3129"
+  },
+  "Shuffle": {
+    "description": "Shuffle the draw pile",
+    "color": "#7C6E50"
+  },
+  "Skip": {
+    "description": "End your turn without drawing a card",
+    "color": "#6992BB"
+  },
+  "See the Future": {
+    "description": "Privately view the top three cards of the deck",
+    "color": "#EB217D"
+  },
+  "Cattermelon": {
+    "description": "(˵¯͒〰¯͒˵)",
+    "color": "#A6A6A6"
+  },
+  "Beard Cat": {
+    "description": "( ˇ෴ˇ )",
+    "color": "#A6A6A6"
+  },
+  "Hairly Potato Cat": {
+    "description": "ᕙ(⇀‸↼‶)ᕗ",
+    "color": "#A6A6A6"
+  },
+  "TacocaT": {
+    "description": "I am a palindrome!",
+    "color": "#A6A6A6"
+  },
+  "Rainbow-Ral Phing Cat": {
+    "description": "(づ ◕‿◕ )づ",
+    "color": "#A6A6A6"
+  }
+}

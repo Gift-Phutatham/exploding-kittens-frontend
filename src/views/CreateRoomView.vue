@@ -39,16 +39,6 @@ export default {
 </script>
 
 <style scoped>
-.bg-image {
-  background-image: url('@/assets/background/homepage.png');
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 90%;
-}
-
 .create-room-wrapper {
   display: flex;
   justify-content: center;
@@ -56,4 +46,3 @@ export default {
   height: 100%;
 }
 </style>
->

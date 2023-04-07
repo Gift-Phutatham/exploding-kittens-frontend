@@ -1,6 +1,6 @@
-<!-- <template>
+<template>
   <div class="bg-image d-flex align-end justify-center">
-    <v-btn class="button">Create / Join Room</v-btn>
+    <v-btn class="button" href="/CreateRoom">Create / Join Room</v-btn>
   </div>
 </template>
 
@@ -10,7 +10,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .bg-image {
   background-image: url('@/assets/background/homepage.png');
   width: 100%;
@@ -24,4 +24,4 @@ export default {
 .button {
   margin-bottom: 110px;
 }
-</style> -->
+</style>

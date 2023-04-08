@@ -16,8 +16,8 @@ import OrangeCatPlayer from '@/assets/images/players/OrangeCatPlayer.jpeg';
 export default {
   data() {
     return {
-      name: 'sdfsfsff',
-      selectedCharacterSrc: BlackCatPlayer,
+      name: '',
+      selectedCharacterSrc: null,
     };
   },
 };

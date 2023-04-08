@@ -1,0 +1,49 @@
+<template>
+  <v-card class="player-card">
+    <v-avatar size="60">
+      <v-img :src="selectedCharacterSrc"></v-img>
+    </v-avatar>
+    <span class="player-name">{{ name }}</span>
+  </v-card>
+</template>
+
+<script>
+import BlackCatPlayer from '@/assets/images/players/BlackCatPlayer.jpeg';
+import GrayCatPlayer from '@/assets/images/players/GrayCatPlayer.jpeg';
+import OBCatPlayer from '@/assets/images/players/OBCatPlayer.jpeg';
+import OrangeCatPlayer from '@/assets/images/players/OrangeCatPlayer.jpeg';
+
+export default {
+  data() {
+    return {
+      name: 'sdfsfsff',
+      selectedCharacterSrc: BlackCatPlayer,
+    };
+  },
+};
+</script>
+
+<style scoped>
+.player-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+  max-width: 150px;
+  border-width: 6px;
+  border-color: #981515;
+  border-radius: 20px;
+}
+
+.player-name {
+  font-weight: bold;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background-color: #981515;
+  padding: 3px 6px;
+  border-radius: 10px;
+  color: #ffffff;
+}
+</style>

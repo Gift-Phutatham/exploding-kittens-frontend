@@ -43,7 +43,7 @@ export default {
   white-space: nowrap;
   background-color: #981515;
   padding: 3px 6px;
-  border-radius: 10px;
+  border-radius: 9px;
   color: #ffffff;
 }
 </style>

@@ -201,12 +201,11 @@ export default {
         {},
       ),
 
-      // TOFIX
-      playerName1: 'hello 1',
+      playerName1: '',
       selectedCharacter1: 'src/assets/images/players/BlackCatPlayer.jpeg',
-      playerName2: 'hello 2',
+      playerName2: '',
       selectedCharacter2: 'src/assets/images/players/GrayCatPlayer.jpeg',
-      playerName3: 'hello 3',
+      playerName3: '',
       selectedCharacter3: 'src/assets/images/players/OBCatPlayer.jpeg',
     };
   },
@@ -247,9 +246,12 @@ export default {
           .slice(state.deck.cards.length - 4, state.deck.cards.length - 1)
           .map((card: any) => card.name);
 
-        console.log(`this.latestCard: ${this.latestCard}`);
-        console.log(`this.toDrawCard: ${this.toDrawCard}`);
-        console.log(`this.topThreeCards: ${this.topThreeCards}`);
+        const players = state.players
+          .filter((player: any) => player !== state.currentPlayer.name)
+          .map((player) => player.name);
+        this.playerName1 = players[0];
+        this.playerName2 = players[1];
+        this.playerName3 = players[2];
 
         this.showCreateRoom = false;
       });

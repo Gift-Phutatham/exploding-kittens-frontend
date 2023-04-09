@@ -1,6 +1,15 @@
 <template>
   <div class="bg-image">
-    <div class="container">
+    <div v-if="showCreateRoom" class="create-room-wrapper">
+      <CreateRoomBox @create-room="onCreateRoom" :disable-create-button="!isCreateButtonEnabled" />
+      <WaitingDialog
+        v-if="showWaitingDialog"
+        :disableStart="users.length != 4"
+        @start="startGame"
+      ></WaitingDialog>
+    </div>
+
+    <div v-else class="container">
       <v-row>
         <v-col cols="10">
           <v-row>
@@ -92,6 +101,10 @@
 </template>
 
 <script lang="ts">
+import CreateRoomBox from '@/components/CreateRoomBox.vue';
+import WaitingDialog from '@/components/dialogs/WaitingDialog.vue';
+import SocketioService from '@/services/socketio.service.ts';
+
 import allCardsJson from '@/assets/allCards.json';
 import LogComponent from '@/components/LogComponent.vue';
 import ChatComponent from '@/components/ChatComponent.vue';
@@ -113,6 +126,9 @@ export default {
   name: 'GameRoom',
 
   components: {
+    CreateRoomBox,
+    WaitingDialog,
+
     PlayButton,
     LogComponent,
     AttackDialog,
@@ -132,6 +148,14 @@ export default {
 
   data() {
     return {
+      showCreateRoom: true,
+      name: '',
+      roomId: '',
+      showWaitingDialog: false,
+      selectedCharacterSrc: null,
+      isCreateButtonEnabled: false,
+      users: [],
+
       hasDied: false,
       allCards: {},
       countDown: 30,
@@ -198,6 +222,36 @@ export default {
   },
 
   methods: {
+    onCreateRoom(roomData: any) {
+      // Update the name and roomId data
+      this.name = roomData.name;
+      this.roomId = roomData.roomId;
+      this.selectedCharacterSrc = roomData.selectedCharacterSrc;
+      this.checkCreateButtonState();
+      this.showWaitingDialog = true;
+
+      // connecting to socket server
+      SocketioService.setupSocketConnection({
+        name: this.name,
+        roomID: this.roomId,
+      });
+      SocketioService.subscribeToRoom(this.roomId, (data: any) => {
+        this.users = data;
+        console.log(this.users);
+      });
+    },
+    startGame() {
+      this.showWaitingDialog = false;
+      SocketioService.startGame();
+      this.showCreateRoom = false;
+    },
+    createRoom() {
+      // Create the room logic here
+    },
+    checkCreateButtonState() {
+      this.isCreateButtonEnabled = !!this.name && !!this.roomId && !!this.selectedCharacterSrc;
+    },
+
     countDownTimer() {
       if (this.countDown > 0) {
         setTimeout(() => {
@@ -294,6 +348,13 @@ export default {
 </script>
 
 <style scoped>
+.create-room-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
 .bg-image {
   background-image: url('@/assets/background/gameroom.jpg');
 }

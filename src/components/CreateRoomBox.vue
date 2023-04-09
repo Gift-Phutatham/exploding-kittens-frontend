@@ -36,10 +36,11 @@
   </v-card>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import CharacterSelector from '@/components/CharacterSelector.vue';
 
-export default {
+export default defineComponent({
   name: 'CreateRoomBox',
   components: {
     CharacterSelector,
@@ -76,7 +77,7 @@ export default {
       this.isFormValid = Boolean(newValue && this.name && this.roomId);
     },
   },
-};
+});
 </script>
 
 <style scoped>

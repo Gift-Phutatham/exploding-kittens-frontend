@@ -12,7 +12,7 @@ defineProps<{
       <v-card height="216" variant="outlined" :color="color">
         <v-card-item>
           <div class="text-center text-grey-darken-3 my-3">
-            <div class="text-h6">
+            <div class="text-subtitle-1">
               {{ name }}
             </div>
             <v-divider class="border-opacity-100 my-5" :color="color"></v-divider>

@@ -21,11 +21,12 @@ class SocketioService {
     });
   }
 
-  subscribeToRoom(roomID: string) {
+  subscribeToRoom(roomID: string, callback: any) {
     if (!this.socket) return true;
     this.socket.emit('join room', roomID); // join the specific room
     this.socket.on('join room', (msg: any) => {
       console.log('Room event received!');
+      return callback(msg);
     });
   }
 

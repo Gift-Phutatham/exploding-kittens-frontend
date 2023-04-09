@@ -3,8 +3,13 @@
     <div class="container">
       <v-row>
         <v-col cols="10">
-          <div class="d-flex justify-center align-start">
-            <v-sheet> Player 1 </v-sheet>
+          <div class="d-flex align-start">
+            <div class="d-flex justify-start">
+              <TimerComponent initialTime="30"></TimerComponent>
+            </div>
+            <div class="d-flex justify-center">
+              <v-sheet> Player 1 </v-sheet>
+            </div>
           </div>
           <div class="d-flex justify-space-between align-center center">
             <v-sheet> Player 2 </v-sheet>
@@ -80,6 +85,7 @@ import AttackDialog from '@/components/dialogs/AttackDialog.vue';
 import DefuseDialog from '@/components/dialogs/DefuseDialog.vue';
 import EndTurnButton from '@/components/buttons/EndTurnButton.vue';
 import DrawPileComponent from '@/components/DrawPileComponent.vue';
+import TimerComponent from '@/components/TimerComponent.vue';
 import RandomCardDialog from '@/components/dialogs/RandomCardDialog.vue';
 import SeeTheFutureDialog from '@/components/dialogs/SeeTheFutureDialog.vue';
 import PlayTwoOfAKindButton from '@/components/buttons/PlayTwoOfAKindButton.vue';
@@ -97,6 +103,7 @@ export default {
     EndTurnButton,
     ChatComponent,
     CardComponent,
+    TimerComponent,
     RandomCardDialog,
     DrawPileComponent,
     SeeTheFutureDialog,

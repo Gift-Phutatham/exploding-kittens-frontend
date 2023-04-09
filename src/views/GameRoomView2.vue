@@ -160,20 +160,9 @@ export default {
       allCards: {},
       countDown: 30,
       selectedIndex: -1,
-      latestCard: 'See the Future', // TOFIX
-      toDrawCard: 'Exploded Kitten', // TOFIX
-      cardsInHand: [
-        // TOFIX
-        'TacocaT',
-        'TacocaT',
-        'Cattermelon',
-        'Cattermelon',
-        'Skip',
-        'Nope',
-        'See the Future',
-        'Favor',
-        'Attack',
-      ],
+      latestCard: '',
+      toDrawCard: '',
+      cardsInHand: [],
 
       showAttackDialog: false,
       attackCard: {
@@ -239,8 +228,27 @@ export default {
         this.users = data;
         console.log(this.users);
       });
-      SocketioService.subscribeToGameState((msg: any) => {
-        console.log(msg);
+      SocketioService.subscribeToGameState((state: any) => {
+        console.log(state);
+        for (let i = 0; i < state.players.length; i++) {
+          if (state.players[i].name === this.name) {
+            this.cardsInHand = state.players[i].hand.map((card: any) => card.name);
+            console.log(state.players[i].hand.map((card: any) => card.name));
+
+            break;
+          }
+        }
+        this.latestCard = state.discardPile[state.discardPile.length - 1].name;
+        this.toDrawCard = state.deck.cards[state.deck.cards.length - 1].name;
+        this.topThreeCards = state.deck.cards
+          .slice(state.deck.cards.length - 4, state.deck.cards.length - 1)
+          .map((card: any) => card.name);
+
+        console.log(`this.latestCard: ${this.latestCard}`);
+        console.log(`this.toDrawCard: ${this.toDrawCard}`);
+        console.log(`this.topThreeCards: ${this.topThreeCards}`);
+
+        this.showCreateRoom = false;
       });
     },
     startGame() {

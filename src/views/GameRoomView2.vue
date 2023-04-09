@@ -239,6 +239,9 @@ export default {
         this.users = data;
         console.log(this.users);
       });
+      SocketioService.subscribeToGameState((msg: any) => {
+        console.log(msg);
+      });
     },
     startGame() {
       this.showWaitingDialog = false;

@@ -1,7 +1,7 @@
 <template>
   <v-btn>
-    <v-icon color="success">mdi-cards</v-icon>
-    Play
+    <v-icon color="secondary">mdi-numeric-2-box-multiple-outline</v-icon>
+    Play 2 of a Kind
   </v-btn>
 </template>
 
@@ -9,6 +9,6 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'PlayButton',
+  name: 'PlayTwoOfAKindButton',
 });
 </script>

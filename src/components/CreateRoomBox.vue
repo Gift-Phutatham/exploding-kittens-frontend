@@ -23,9 +23,16 @@
 
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn class="ml-auto" :disabled="!isFormValid" color="secondary" dark @click="emitCreateRoom"
-        >Create</v-btn
+      <v-btn
+        class="ml-auto"
+        :disabled="!isFormValid"
+        color="secondary"
+        dark
+        @click="emitCreateRoom"
+        href="/GameRoom"
       >
+        Create
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>

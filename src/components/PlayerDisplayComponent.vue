@@ -7,13 +7,16 @@
   </v-card>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  name: 'PlayerDisplayComponent',
   props: {
     name: String,
     selectedCharacterSrc: String,
   },
-};
+});
 </script>
 
 <style scoped>
@@ -22,7 +25,7 @@ export default {
   flex-direction: column;
   align-items: center;
   padding: 5px;
-  max-width: 150px;
+  width: 150px;
   border-width: 6px;
   border-color: #981515;
   border-radius: 20px;

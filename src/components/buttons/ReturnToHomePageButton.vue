@@ -1,6 +1,7 @@
 <template>
-  <v-btn class="text-white" prepend-icon="mdi-exit-to-app" color="#841618">
-    Return to Home Page
+  <v-btn href="/">
+    <v-icon color="#841618">mdi-exit-to-app</v-icon>
+    Home Page
   </v-btn>
 </template>
 

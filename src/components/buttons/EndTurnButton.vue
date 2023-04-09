@@ -1,5 +1,8 @@
 <template>
-  <v-btn prepend-icon="mdi-card-plus" color="blue-darken-4"> End Turn </v-btn>
+  <v-btn>
+    <v-icon color="blue-darken-4">mdi-card-plus</v-icon>
+    End Turn
+  </v-btn>
 </template>
 
 <script lang="ts">

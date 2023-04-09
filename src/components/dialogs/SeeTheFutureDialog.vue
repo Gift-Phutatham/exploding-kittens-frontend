@@ -24,8 +24,10 @@ defineProps<{
               md="4"
               lg="4"
             >
-              <CardComponent :name="key" :description="card.description" :color="card.color">
-              </CardComponent>
+              <div class="d-flex justify-center">
+                <CardComponent :name="key" :description="card.description" :color="card.color">
+                </CardComponent>
+              </div>
               <div class="d-none d-md-flex d-lg-flex d-xl-flex justify-center mt-3">
                 <p v-if="index == 0">Top</p>
                 <p v-if="index == Object.keys(topThreeCards).length - 1">Bottom</p>
@@ -36,7 +38,7 @@ defineProps<{
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn :color="themeColor" @click="openDialog = false">Done</v-btn>
+        <v-btn :color="themeColor" @click="onClose">Done</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -56,6 +58,12 @@ export default defineComponent({
       openDialog: true,
       themeColor: '#EB217D',
     };
+  },
+  methods: {
+    onClose() {
+      this.$emit('onClose');
+      this.openDialog = false;
+    },
   },
 });
 </script>

@@ -14,7 +14,7 @@ defineProps<{
       </v-toolbar>
       <v-card-text class="text-center mx-3">
         <v-row>
-          <v-col cols="12" xs="12" sm="12" md="5" lg="5" xl="5">
+          <v-col cols="12" xs="12" sm="12" md="4" lg="4" xl="4" class="d-flex justify-center">
             <CardComponent
               :name="cardName"
               :description="card[cardName].description"
@@ -26,9 +26,9 @@ defineProps<{
             cols="12"
             xs="12"
             sm="12"
-            md="7"
-            lg="7"
-            xl="7"
+            md="8"
+            lg="8"
+            xl="8"
           >
             <v-row class="text-justify">
               <div class="text-body-1">
@@ -45,9 +45,7 @@ defineProps<{
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn :color="card[cardName].color" :disabled="!value" @click="openDialog = false">
-          Done
-        </v-btn>
+        <v-btn :color="card[cardName].color" :disabled="!value" @click="submit"> Done </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -68,6 +66,12 @@ export default defineComponent({
       cardName: 'Attack',
       value: '',
     };
+  },
+  methods: {
+    submit() {
+      this.$emit('attack', this.value);
+      this.openDialog = false;
+    },
   },
 });
 </script>

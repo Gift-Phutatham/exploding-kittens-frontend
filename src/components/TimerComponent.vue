@@ -4,8 +4,11 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  name: 'TimerComponent',
   props: {
     initialTime: {
       type: Number,
@@ -24,5 +27,5 @@ export default {
       }
     }, 1000);
   },
-};
+});
 </script>

@@ -7,12 +7,12 @@ defineProps<{
 </script>
 
 <template>
-  <v-card width="200" height="290">
+  <v-card width="175" height="250">
     <v-container>
-      <v-card height="256" variant="outlined" :color="color">
+      <v-card height="216" variant="outlined" :color="color">
         <v-card-item>
-          <div class="text-center text-grey-darken-3 my-10">
-            <div class="text-h6">
+          <div class="text-center text-grey-darken-3 my-3">
+            <div class="text-subtitle-1">
               {{ name }}
             </div>
             <v-divider class="border-opacity-100 my-5" :color="color"></v-divider>

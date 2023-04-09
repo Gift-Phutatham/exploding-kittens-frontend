@@ -8,11 +8,6 @@
 </template>
 
 <script>
-import BlackCatPlayer from '@/assets/images/players/BlackCatPlayer.jpeg';
-import GrayCatPlayer from '@/assets/images/players/GrayCatPlayer.jpeg';
-import OBCatPlayer from '@/assets/images/players/OBCatPlayer.jpeg';
-import OrangeCatPlayer from '@/assets/images/players/OrangeCatPlayer.jpeg';
-
 export default {
   props: {
     name: String,

@@ -3,14 +3,14 @@
     <div class="container">
       <v-row>
         <v-col cols="10">
-          <div class="d-flex align-start">
-            <div class="d-flex justify-start">
+          <v-row>
+            <v-col class="d-flex justify-start" cols="auto">
               <TimerComponent initialTime="30"></TimerComponent>
-            </div>
-            <div class="d-flex justify-center">
-              <v-sheet> Player 1 </v-sheet>
-            </div>
-          </div>
+            </v-col>
+            <v-col class="d-flex justify-center">
+              <v-sheet>Player 1</v-sheet>
+            </v-col>
+          </v-row>
           <div class="d-flex justify-space-between align-center center">
             <v-sheet> Player 2 </v-sheet>
             <v-row class="d-flex justify-center align-end">

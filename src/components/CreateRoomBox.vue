@@ -29,7 +29,6 @@
         color="secondary"
         dark
         @click="emitCreateRoom"
-        href="/GameRoom"
       >
         Create
       </v-btn>

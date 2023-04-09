@@ -38,7 +38,7 @@ defineProps<{
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn :color="themeColor" @click="openDialog = false"> Done </v-btn>
+        <v-btn :color="themeColor" @click="onClose"> Done </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -58,6 +58,12 @@ export default defineComponent({
       openDialog: true,
       themeColor: '#232321',
     };
+  },
+  methods: {
+    onClose() {
+      this.$emit('onClose');
+      this.openDialog = false;
+    },
   },
 });
 </script>

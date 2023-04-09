@@ -68,19 +68,26 @@
     </div>
   </div>
   <AttackDialog v-if="showAttackDialog" :card="attackCard" @attack="getAttackValue"></AttackDialog>
-  <DefuseDialog v-if="showDefuseDialog" :card="defuseCard"></DefuseDialog>
+  <DefuseDialog
+    v-if="showDefuseDialog"
+    :card="defuseCard"
+    @onClose="showDefuseDialog = false"
+  ></DefuseDialog>
   <ExplodingKittenDialog
     v-if="showExplodedDialog"
     :card="explodingKittenCard"
+    @onClose="showExplodedDialog = false"
   ></ExplodingKittenDialog>
   <RandomCardDialog
     v-if="showRandomCardDialog"
     :cardName="randomCardName"
     :card="randomCard"
+    @onClose="showRandomCardDialog = false"
   ></RandomCardDialog>
   <SeeTheFutureDialog
     v-if="showSeeTheFutureDialog"
     :topThreeCards="topThreeCards"
+    @onClose="showSeeTheFutureDialog = false"
   ></SeeTheFutureDialog>
 </template>
 

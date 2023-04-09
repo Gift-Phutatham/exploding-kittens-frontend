@@ -90,11 +90,11 @@ import LogComponent from '@/components/LogComponent.vue';
 import ChatComponent from '@/components/ChatComponent.vue';
 import CardComponent from '@/components/CardComponent.vue';
 import PlayButton from '@/components/buttons/PlayButton.vue';
+import TimerComponent from '@/components/TimerComponent.vue';
 import AttackDialog from '@/components/dialogs/AttackDialog.vue';
 import DefuseDialog from '@/components/dialogs/DefuseDialog.vue';
 import EndTurnButton from '@/components/buttons/EndTurnButton.vue';
 import DrawPileComponent from '@/components/DrawPileComponent.vue';
-import TimerComponent from '@/components/TimerComponent.vue';
 import PlayerDisplay from '@/components/PlayerDisplayComponent.vue';
 import RandomCardDialog from '@/components/dialogs/RandomCardDialog.vue';
 import SeeTheFutureDialog from '@/components/dialogs/SeeTheFutureDialog.vue';
@@ -107,12 +107,12 @@ export default {
 
   components: {
     PlayButton,
+    LogComponent,
     AttackDialog,
     DefuseDialog,
-    LogComponent,
-    EndTurnButton,
     ChatComponent,
     CardComponent,
+    EndTurnButton,
     PlayerDisplay,
     TimerComponent,
     RandomCardDialog,

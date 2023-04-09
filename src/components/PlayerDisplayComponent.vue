@@ -22,7 +22,7 @@ export default {
   flex-direction: column;
   align-items: center;
   padding: 5px;
-  max-width: 150px;
+  width: 150px;
   border-width: 6px;
   border-color: #981515;
   border-radius: 20px;

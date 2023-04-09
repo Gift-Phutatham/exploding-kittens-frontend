@@ -8,11 +8,17 @@
               <TimerComponent initialTime="30"></TimerComponent>
             </v-col>
             <v-col class="d-flex justify-center">
-              <v-sheet>Player 1</v-sheet>
+              <PlayerDisplay
+                :name="playerName1"
+                :selectedCharacterSrc="selectedCharacter1"
+              ></PlayerDisplay>
             </v-col>
           </v-row>
           <div class="d-flex justify-space-between align-center center">
-            <v-sheet> Player 2 </v-sheet>
+            <PlayerDisplay
+              :name="playerName2"
+              :selectedCharacterSrc="selectedCharacter2"
+            ></PlayerDisplay>
             <v-row class="d-flex justify-center align-end">
               <DrawPileComponent></DrawPileComponent>
               <CardComponent
@@ -22,7 +28,10 @@
                 :color="allCards[latestCard].color"
               ></CardComponent>
             </v-row>
-            <v-sheet> Player 3 </v-sheet>
+            <PlayerDisplay
+              :name="playerName3"
+              :selectedCharacterSrc="selectedCharacter3"
+            ></PlayerDisplay>
           </div>
           <div class="d-flex justify-center align-end">
             <v-col cols="1" v-for="(card, index) in cardsInHand" :key="index">
@@ -86,6 +95,7 @@ import DefuseDialog from '@/components/dialogs/DefuseDialog.vue';
 import EndTurnButton from '@/components/buttons/EndTurnButton.vue';
 import DrawPileComponent from '@/components/DrawPileComponent.vue';
 import TimerComponent from '@/components/TimerComponent.vue';
+import PlayerDisplay from '@/components/PlayerDisplayComponent.vue';
 import RandomCardDialog from '@/components/dialogs/RandomCardDialog.vue';
 import SeeTheFutureDialog from '@/components/dialogs/SeeTheFutureDialog.vue';
 import PlayTwoOfAKindButton from '@/components/buttons/PlayTwoOfAKindButton.vue';
@@ -103,6 +113,7 @@ export default {
     EndTurnButton,
     ChatComponent,
     CardComponent,
+    PlayerDisplay,
     TimerComponent,
     RandomCardDialog,
     DrawPileComponent,
@@ -168,6 +179,13 @@ export default {
         (accumulator, value) => ({ ...accumulator, [value]: allCardsJson[value] }),
         {},
       ),
+
+      playerName1: 'hello 1',
+      selectedCharacter1: 'src/assets/images/players/BlackCatPlayer.jpeg',
+      playerName2: 'hello 2',
+      selectedCharacter2: 'src/assets/images/players/GrayCatPlayer.jpeg',
+      playerName3: 'hello 3',
+      selectedCharacter3: 'src/assets/images/players/OBCatPlayer.jpeg',
     };
   },
 

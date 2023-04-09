@@ -300,6 +300,6 @@ export default {
 }
 
 .center {
-  height: 65%;
+  height: 52.5%;
 }
 </style>

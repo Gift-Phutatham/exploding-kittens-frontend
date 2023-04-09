@@ -26,6 +26,7 @@ export default {
       // Update the name and roomId data
       this.name = roomData.name;
       this.roomId = roomData.roomId;
+      this.selectedCharacterSrc = roomData.selectedCharacterSrc;
       this.checkCreateButtonState();
     },
     createRoom() {

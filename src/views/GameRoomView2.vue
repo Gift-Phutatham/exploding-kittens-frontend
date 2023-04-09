@@ -31,6 +31,7 @@
             <v-row class="d-flex justify-center align-end">
               <DrawPileComponent></DrawPileComponent>
               <CardComponent
+                v-if="latestCard"
                 class="ml-3"
                 :name="latestCard"
                 :description="allCards[latestCard].description"
@@ -238,7 +239,9 @@ export default {
             break;
           }
         }
-        this.latestCard = state.discardPile[state.discardPile.length - 1].name;
+        if (state.discardPile.length > 0) {
+          this.latestCard = state.discardPile[state.discardPile.length - 1].name;
+        }
         this.toDrawCard = state.deck.cards[state.deck.cards.length - 1].name;
         this.topThreeCards = state.deck.cards
           .slice(state.deck.cards.length - 4, state.deck.cards.length - 1)

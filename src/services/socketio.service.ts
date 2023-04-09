@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 
 class SocketioService {
-  socket;
+  socket: any;
   constructor() {}
 
   setupSocketConnection() {

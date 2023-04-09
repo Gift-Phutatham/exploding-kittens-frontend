@@ -35,12 +35,41 @@ class SocketioService {
     });
   }
 
+  subscribeToGameLog() {
+    if (!this.socket) return true;
+    this.socket.on('game log', (msg) => {
+      console.log(msg);
+      // return cb(null, msg);
+    });
+  }
+
   sendMessage({ message, roomID }, cb) {
     if (this.socket) this.socket.emit('message', { message, roomID }, cb);
   }
 
-  startGame(roomID) {
-    if (this.socket) this.socket.emit('game start', roomID);
+  startGame() {
+    if (this.socket) this.socket.emit('game loop');
+  }
+
+  action() {
+    if (this.socket) {
+      console.log('send action');
+      this.socket.emit('action', Number(0));
+    }
+  }
+
+  steal() {
+    if (this.socket) {
+      console.log('send steal');
+      this.socket.emit('request', Number(0));
+    }
+  }
+
+  endturn() {
+    if (this.socket) {
+      console.log('end turn');
+      this.socket.emit('action', Number(-1));
+    }
   }
 
   disconnect() {

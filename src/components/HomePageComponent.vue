@@ -23,7 +23,10 @@
         <button type="submit">Submit</button>
       </form>
     </div>
-    <button @click="startgame">click here</button>
+    <button @click="startgame">start here</button>
+    <button @click="sendAction">sent action here</button>
+    <button @click="sendRequest">req card</button>
+    <button @click="sendEnd">end turn</button>
   </div>
 </template>
 
@@ -57,6 +60,7 @@ export default {
         this.users = data;
         console.log(this.users);
       });
+      SocketioService.subscribeToGameLog();
     },
     submitMessage() {
       console.log(this.inputRoomText);
@@ -71,6 +75,17 @@ export default {
       const CHAT_ROOM = this.inputRoomText;
       SocketioService.startGame(CHAT_ROOM);
       console.log(CHAT_ROOM);
+    },
+    sendAction() {
+      // const CHAT_ROOM = this.inputRoomText;
+      SocketioService.action();
+      // console.log(CHAT_ROOM);
+    },
+    sendRequest() {
+      SocketioService.steal();
+    },
+    sendEnd() {
+      SocketioService.endturn();
     },
   },
   beforeUnmount() {

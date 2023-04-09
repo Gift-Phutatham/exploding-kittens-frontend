@@ -1,0 +1,28 @@
+<template>
+  <div>
+    <div class="display-1 text-center">{{ timeLeft }}</div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    initialTime: {
+      type: Number,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      timeLeft: this.initialTime,
+    };
+  },
+  mounted() {
+    setInterval(() => {
+      if (this.timeLeft > 0) {
+        this.timeLeft--;
+      }
+    }, 1000);
+  },
+};
+</script>

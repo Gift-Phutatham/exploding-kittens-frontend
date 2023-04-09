@@ -252,16 +252,6 @@ export default {
       this.isCreateButtonEnabled = !!this.name && !!this.roomId && !!this.selectedCharacterSrc;
     },
 
-    countDownTimer() {
-      if (this.countDown > 0) {
-        setTimeout(() => {
-          this.countDown -= 1;
-          this.countDownTimer();
-        }, 1000);
-      } else {
-        this.countDown = 30;
-      }
-    },
     selectCard(index: number) {
       this.selectedIndex = index;
     },
@@ -340,7 +330,6 @@ export default {
 
   created() {
     this.allCards = allCardsJson;
-    this.countDownTimer();
     this.checkAttack();
     this.checkTwoOfAKind();
   },

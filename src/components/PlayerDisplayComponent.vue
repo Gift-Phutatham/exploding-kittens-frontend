@@ -14,11 +14,9 @@ import OBCatPlayer from '@/assets/images/players/OBCatPlayer.jpeg';
 import OrangeCatPlayer from '@/assets/images/players/OrangeCatPlayer.jpeg';
 
 export default {
-  data() {
-    return {
-      name: '',
-      selectedCharacterSrc: null,
-    };
+  props: {
+    name: String,
+    selectedCharacterSrc: String,
   },
 };
 </script>

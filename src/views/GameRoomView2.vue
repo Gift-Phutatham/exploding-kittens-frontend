@@ -180,6 +180,7 @@ export default {
         {},
       ),
 
+      // TOFIX
       playerName1: 'hello 1',
       selectedCharacter1: 'src/assets/images/players/BlackCatPlayer.jpeg',
       playerName2: 'hello 2',

@@ -246,6 +246,10 @@ export default {
         this.gameLogs.push(msg);
       });
 
+      SocketioService.subscribeToNope((msg: any) => {
+        // this.gameLogs.push(msg);
+      });
+
       SocketioService.subscribeToGameState((state: any) => {
         console.log(state);
 

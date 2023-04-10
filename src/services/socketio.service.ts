@@ -46,6 +46,13 @@ class SocketioService {
     });
   }
 
+  subscribeToNope(callback: any) {
+    if (!this.socket) return true;
+    this.socket.on('after nope', (msg: any) => {
+      return callback(msg);
+    });
+  }
+
   sendMessage(message: any) {
     if (this.socket) this.socket.emit('message', message);
   }

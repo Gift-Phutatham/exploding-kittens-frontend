@@ -168,13 +168,14 @@ export default {
       hasDied: false,
       wrongTurn: true,
       allCards: {},
-      countDown: 30,
-      nopeTimeout: 5000,
+      countDown: 10,
+      nopeTimeout: 5,
       selectedIndex: -1,
       latestCard: '',
       toDrawCard: '',
       cardsInHand: [],
       diedPlayer: [],
+      lastNopePlayer: '',
 
       disableCard: false,
       disableEndTurn: false,
@@ -249,7 +250,7 @@ export default {
       SocketioService.subscribeToNope(async () => {
         this.selectedIndex = -1;
         this.beforeNope();
-        await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout));
+        await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout * 1000));
         this.afterNope();
       });
 
@@ -318,9 +319,7 @@ export default {
           this.wrongTurn = true;
         }
 
-        if (this.name === state.lastNopePlayer.name) {
-          this.disablePlayNope = true;
-        }
+        this.lastNopePlayer = state.lastNopePlayer.name;
 
         this.showCreateRoom = false;
       });
@@ -342,8 +341,7 @@ export default {
       this.disableEndTurn = true;
       this.disablePlayTwoOfAKind = true;
       this.disablePlay = true;
-      console.log(`>>>>> ${this.cardsInHand}`);
-      if (this.cardsInHand.includes('Nope')) {
+      if (this.cardsInHand.includes('Nope') && this.name !== this.lastNopePlayer) {
         this.disablePlayNope = false;
       }
     },
@@ -360,7 +358,6 @@ export default {
     async playCard() {
       if (this.selectedIndex !== -1) {
         SocketioService.playCard(this.selectedIndex);
-        await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout));
       }
     },
     async playTwoOfAKind() {

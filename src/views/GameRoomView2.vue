@@ -158,8 +158,7 @@ export default {
       users: [],
 
       hasDied: false,
-      wrongTurn: false,
-      currentPlayer: '',
+      wrongTurn: true,
       allCards: {},
       countDown: 30,
       selectedIndex: -1,
@@ -266,7 +265,10 @@ export default {
             {},
           );
 
-        if (this.name !== state.currentPlayer.name) {
+        if (this.name === state.currentPlayer.name) {
+          this.wrongTurn = false;
+        } else {
+          this.selectedIndex = -1;
           this.wrongTurn = true;
         }
 

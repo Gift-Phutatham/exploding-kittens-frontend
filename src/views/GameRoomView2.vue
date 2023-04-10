@@ -49,7 +49,7 @@
           <div class="d-flex justify-center align-end">
             <v-col cols="1" v-for="(card, index) in cardsInHand" :key="index">
               <CardComponent
-                :disabled="hasDied || wrongTurn || waitingForNope"
+                :disabled="hasDied || wrongTurn || disableCard"
                 :name="card"
                 :description="allCards[card].description"
                 :color="allCards[card].color"
@@ -66,11 +66,11 @@
       </v-row>
       <v-bottom-navigation grow>
         <EndTurnButton
-          :disabled="hasDied || wrongTurn || waitingForNope"
+          :disabled="hasDied || wrongTurn || disableEndTurn"
           @click="endTurn"
         ></EndTurnButton>
         <PlayTwoOfAKindButton
-          :disabled="hasDied || !hasTwoOfAKind || wrongTurn || waitingForNope"
+          :disabled="hasDied || !hasTwoOfAKind || wrongTurn || disablePlayTwoOfAKind"
           @click="playTwoOfAKind"
         ></PlayTwoOfAKindButton>
         <PlayButton
@@ -79,11 +79,11 @@
             selectedIndex == -1 ||
             catCards.includes(cardsInHand[selectedIndex]) ||
             wrongTurn ||
-            waitingForNope
+            disablePlay
           "
           @click="playCard"
         ></PlayButton>
-        <PlayNopeButton :disabled="hasDied || cannotPlayNope" @click="playNope"></PlayNopeButton>
+        <PlayNopeButton :disabled="hasDied || disablePlayNope" @click="playNope"></PlayNopeButton>
         <ReturnToHomePageButton></ReturnToHomePageButton>
       </v-bottom-navigation>
     </div>
@@ -167,8 +167,6 @@ export default {
 
       hasDied: false,
       wrongTurn: true,
-      cannotPlayNope: true,
-      waitingForNope: false,
       allCards: {},
       countDown: 30,
       nopeTimeout: 5000,
@@ -177,6 +175,12 @@ export default {
       toDrawCard: '',
       cardsInHand: [],
       diedPlayer: [],
+
+      disableCard: false,
+      disableEndTurn: false,
+      disablePlayTwoOfAKind: false,
+      disablePlay: false,
+      disablePlayNope: true,
 
       gameLogs: [],
       chats: [],
@@ -292,7 +296,7 @@ export default {
 
         if (this.name === state.currentPlayer.name) {
           this.wrongTurn = false;
-          this.cannotPlayNope = true;
+          this.disablePlayNope = true;
         } else {
           this.selectedIndex = -1;
           this.hasTwoOfAKind = false;
@@ -314,11 +318,22 @@ export default {
     selectCard(index: number) {
       this.selectedIndex = index;
     },
-    checkNope() {
+    beforeNope() {
+      this.disableCard = true;
+      this.disableEndTurn = true;
+      this.disablePlayTwoOfAKind = true;
+      this.disablePlay = true;
+      console.log(`>>>>> ${this.cardsInHand}`);
       if (this.cardsInHand.includes('Nope')) {
-        this.cannotPlayNope = false;
-        this.waitingForNope = true;
+        this.disablePlayNope = false;
       }
+    },
+    afterNope() {
+      this.disableCard = false;
+      this.disableEndTurn = false;
+      this.disablePlayTwoOfAKind = false;
+      this.disablePlay = false;
+      this.disablePlayNope = true;
     },
     playNope() {
       SocketioService.playNope();
@@ -332,10 +347,10 @@ export default {
     },
     async playCard() {
       if (this.selectedIndex !== -1) {
-        // this.checkNope();
-        // await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout));
-        // this.cannotPlayNope = true;
-        // this.waitingForNope = false;
+        this.beforeNope();
+        await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout));
+        this.afterNope();
+        console.log(`>>>>> ${this.selectedIndex}`);
         this.act(this.cardsInHand[this.selectedIndex]);
         SocketioService.playCard(this.selectedIndex);
         this.selectedIndex = -1;
@@ -343,10 +358,9 @@ export default {
     },
     async playTwoOfAKind() {
       this.selectedIndex = -1;
-      // this.checkNope();
-      // await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout));
-      // this.cannotPlayNope = true;
-      // this.waitingForNope = false;
+      this.beforeNope();
+      await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout));
+      this.afterNope();
       this.showRandomCardDialog = true;
       SocketioService.playCard(this.cardsInHand.indexOf(this.firstTwoOfAKind));
     },

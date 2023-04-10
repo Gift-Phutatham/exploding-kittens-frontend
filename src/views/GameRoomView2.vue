@@ -247,6 +247,7 @@ export default {
         this.playerName1 = players[0];
         this.playerName2 = players[1];
         this.playerName3 = players[2];
+        // TODO: Gray out died player
 
         for (let i = 0; i < state.players.length; i++) {
           if (state.players[i].name === this.name) {
@@ -265,6 +266,10 @@ export default {
             (accumulator: any, value: any) => ({ ...accumulator, [value]: allCardsJson[value] }),
             {},
           );
+
+        if (this.latestCard === 'Attack' && this.cardsInHand.includes('Attack')) {
+          this.showAttackDialog = true;
+        }
 
         const catCardsCounts = this.catCards.reduce(
           (a, catCard) => ({
@@ -298,11 +303,6 @@ export default {
 
     selectCard(index: number) {
       this.selectedIndex = index;
-    },
-    checkAttack() {
-      if (this.latestCard === 'Attack' && this.cardsInHand.includes('Attack')) {
-        this.showAttackDialog = true;
-      }
     },
     act(card: string) {
       if (card === 'Favor') {
@@ -366,7 +366,6 @@ export default {
 
   created() {
     this.allCards = allCardsJson;
-    this.checkAttack();
   },
 };
 </script>

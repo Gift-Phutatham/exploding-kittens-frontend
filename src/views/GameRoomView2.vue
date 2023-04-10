@@ -246,8 +246,11 @@ export default {
         this.gameLogs.push(msg);
       });
 
-      SocketioService.subscribeToNope((msg: any) => {
-        // this.gameLogs.push(msg);
+      SocketioService.subscribeToNope(async (msg: any) => {
+        this.beforeNope();
+        await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout));
+        this.afterNope();
+        // this.beforeNope();
       });
 
       SocketioService.subscribeToGameState((state: any) => {
@@ -307,6 +310,10 @@ export default {
           this.wrongTurn = true;
         }
 
+        if (this.name === state.lastNopePlayer.name) {
+          this.disablePlayNope = true;
+        }
+
         this.showCreateRoom = false;
       });
     },
@@ -351,22 +358,23 @@ export default {
     },
     async playCard() {
       if (this.selectedIndex !== -1) {
-        this.beforeNope();
-        await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout));
-        this.afterNope();
         console.log(`>>>>> ${this.selectedIndex}`);
-        this.act(this.cardsInHand[this.selectedIndex]);
+        const current = this.cardsInHand[this.selectedIndex];
         SocketioService.playCard(this.selectedIndex);
         this.selectedIndex = -1;
+        await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout));
+        console.log(this.selectedIndex);
+        this.act(current); // TODO
       }
     },
     async playTwoOfAKind() {
       this.selectedIndex = -1;
-      this.beforeNope();
-      await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout));
-      this.afterNope();
-      this.showRandomCardDialog = true;
       SocketioService.playCard(this.cardsInHand.indexOf(this.firstTwoOfAKind));
+      // this.beforeNope();
+      // await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout));
+      // this.afterNope();
+      this.showRandomCardDialog = true;
+      // SocketioService.playCard(this.cardsInHand.indexOf(this.firstTwoOfAKind));
     },
     endTurn() {
       this.selectedIndex = -1;

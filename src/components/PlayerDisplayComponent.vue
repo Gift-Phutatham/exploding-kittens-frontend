@@ -1,5 +1,13 @@
+<script setup lang="ts">
+defineProps<{
+  name: string;
+  selectedCharacterSrc: string;
+  diedPlayer: Array<string>;
+}>();
+</script>
+
 <template>
-  <v-card class="player-card">
+  <v-card class="player-card" :disabled="diedPlayer.includes(name)">
     <v-avatar size="60">
       <v-img :src="selectedCharacterSrc"></v-img>
     </v-avatar>
@@ -12,10 +20,6 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'PlayerDisplayComponent',
-  props: {
-    name: String,
-    selectedCharacterSrc: String,
-  },
 });
 </script>
 

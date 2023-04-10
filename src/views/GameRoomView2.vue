@@ -20,6 +20,7 @@
               <PlayerDisplay
                 :name="playerName1"
                 :selectedCharacterSrc="selectedCharacter1"
+                :diedPlayer="diedPlayer"
               ></PlayerDisplay>
             </v-col>
           </v-row>
@@ -27,6 +28,7 @@
             <PlayerDisplay
               :name="playerName2"
               :selectedCharacterSrc="selectedCharacter2"
+              :diedPlayer="diedPlayer"
             ></PlayerDisplay>
             <v-row class="d-flex justify-center align-end">
               <DrawPileComponent></DrawPileComponent>
@@ -41,6 +43,7 @@
             <PlayerDisplay
               :name="playerName3"
               :selectedCharacterSrc="selectedCharacter3"
+              :diedPlayer="diedPlayer"
             ></PlayerDisplay>
           </div>
           <div class="d-flex justify-center align-end">
@@ -165,6 +168,7 @@ export default {
       latestCard: '',
       toDrawCard: '',
       cardsInHand: [],
+      diedPlayer: [],
 
       gameLogs: [],
       chats: [],
@@ -241,17 +245,17 @@ export default {
       SocketioService.subscribeToGameState((state: any) => {
         console.log(state);
 
-        const players = state.players
+        const players = state.allPlayers
           .map((player: any) => player.name)
           .filter((player: any) => player !== this.name);
         this.playerName1 = players[0];
         this.playerName2 = players[1];
         this.playerName3 = players[2];
-        // TODO: Gray out died player
+        this.diedPlayer = state.diedPlayer.map((players: any) => players.name);
 
-        for (let i = 0; i < state.players.length; i++) {
-          if (state.players[i].name === this.name) {
-            this.cardsInHand = state.players[i].hand.map((card: any) => card.name);
+        for (let i = 0; i < state.allPlayers.length; i++) {
+          if (state.allPlayers[i].name === this.name) {
+            this.cardsInHand = state.allPlayers[i].hand.map((card: any) => card.name);
             break;
           }
         }

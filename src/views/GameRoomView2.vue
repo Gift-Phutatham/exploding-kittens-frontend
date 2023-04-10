@@ -79,6 +79,7 @@
           "
           @click="playCard"
         ></PlayButton>
+        <PlayNopeButton :disabled="hasDied || cannotPlayNope" @click="playNope"></PlayNopeButton>
         <ReturnToHomePageButton></ReturnToHomePageButton>
       </v-bottom-navigation>
     </div>
@@ -121,6 +122,7 @@ import DefuseDialog from '@/components/dialogs/DefuseDialog.vue';
 import EndTurnButton from '@/components/buttons/EndTurnButton.vue';
 import DrawPileComponent from '@/components/DrawPileComponent.vue';
 import PlayerDisplay from '@/components/PlayerDisplayComponent.vue';
+import PlayNopeButton from '@/components/buttons/PlayNopeButton.vue';
 import RandomCardDialog from '@/components/dialogs/RandomCardDialog.vue';
 import SeeTheFutureDialog from '@/components/dialogs/SeeTheFutureDialog.vue';
 import PlayTwoOfAKindButton from '@/components/buttons/PlayTwoOfAKindButton.vue';
@@ -143,6 +145,7 @@ export default {
     EndTurnButton,
     PlayerDisplay,
     TimerComponent,
+    PlayNopeButton,
     RandomCardDialog,
     DrawPileComponent,
     SeeTheFutureDialog,
@@ -163,6 +166,7 @@ export default {
 
       hasDied: false,
       wrongTurn: true,
+      cannotPlayNope: true,
       allCards: {},
       countDown: 30,
       selectedIndex: -1,
@@ -295,10 +299,14 @@ export default {
 
         if (this.name === state.currentPlayer.name) {
           this.wrongTurn = false;
+          this.cannotPlayNope = true;
         } else {
           this.selectedIndex = -1;
           this.hasTwoOfAKind = false;
           this.wrongTurn = true;
+          if (this.cardsInHand.includes('Nope')) {
+            this.cannotPlayNope = false;
+          }
         }
 
         this.showCreateRoom = false;
@@ -315,6 +323,9 @@ export default {
 
     selectCard(index: number) {
       this.selectedIndex = index;
+    },
+    playNope() {
+      SocketioService.playNope();
     },
     act(card: string) {
       if (card === 'Favor') {

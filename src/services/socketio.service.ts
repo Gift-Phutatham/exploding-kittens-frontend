@@ -64,6 +64,10 @@ class SocketioService {
     this.playCard(-1);
   }
 
+  playNope() {
+    this.socket.emit('nope', true);
+  }
+
   disconnect() {
     if (this.socket) {
       this.socket.disconnect();

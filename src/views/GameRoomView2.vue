@@ -189,9 +189,10 @@ export default {
       catCards: [
         'Cattermelon',
         'Beard Cat',
-        'Hairly Potato Cat',
-        'TacocaT',
-        'Rainbow-Ral Phing Cat',
+        'Hairy Potato Cat',
+        'Tacocat',
+        'Rainbow-Ralphing Cat',
+        'Zombie Cat',
       ],
       showRandomCardDialog: false,
       randomCardName: '',
@@ -265,10 +266,21 @@ export default {
             {},
           );
 
+        const catCardsCounts = this.catCards.reduce(
+          (a, catCard) => ({
+            ...a,
+            [catCard]: this.cardsInHand.filter((cardInHand) => cardInHand == catCard).length,
+          }),
+          {},
+        );
+        this.firstTwoOfAKind = this.catCards.find((catCard) => catCardsCounts[catCard] > 1) || '';
+        this.hasTwoOfAKind = this.firstTwoOfAKind !== '';
+
         if (this.name === state.currentPlayer.name) {
           this.wrongTurn = false;
         } else {
           this.selectedIndex = -1;
+          this.hasTwoOfAKind = false;
           this.wrongTurn = true;
         }
 
@@ -292,17 +304,6 @@ export default {
         this.showAttackDialog = true;
       }
     },
-    checkTwoOfAKind() {
-      const catCardsCounts = this.catCards.reduce(
-        (a, catCard) => ({
-          ...a,
-          [catCard]: this.cardsInHand.filter((cardInHand) => cardInHand == catCard).length,
-        }),
-        {},
-      );
-      this.firstTwoOfAKind = this.catCards.find((catCard) => catCardsCounts[catCard] > 1) || '';
-      this.hasTwoOfAKind = this.firstTwoOfAKind !== '';
-    },
     act(card: string) {
       if (card === 'Favor') {
         this.randomCardName = 'Favor'; // TOFIX
@@ -316,8 +317,8 @@ export default {
     },
     playCard() {
       if (this.selectedIndex !== -1) {
+        SocketioService.playCard(this.selectedIndex);
         this.act(this.cardsInHand[this.selectedIndex]);
-        this.cardsInHand.splice(this.selectedIndex, 1);
         this.selectedIndex = -1;
       }
     },
@@ -332,11 +333,11 @@ export default {
         const catIndex = this.cardsInHand.indexOf(this.firstTwoOfAKind);
         this.cardsInHand.splice(catIndex, 1);
       }
-      this.checkTwoOfAKind();
     },
     endTurn() {
       this.selectedIndex = -1;
       if (this.toDrawCard === 'Exploded Kitten') {
+        SocketioService.endTurn();
         if (this.cardsInHand.includes('Defuse')) {
           this.showDefuseDialog = true;
           const defuseFirstIndex = this.cardsInHand.indexOf('Defuse');
@@ -366,7 +367,6 @@ export default {
   created() {
     this.allCards = allCardsJson;
     this.checkAttack();
-    this.checkTwoOfAKind();
   },
 };
 </script>

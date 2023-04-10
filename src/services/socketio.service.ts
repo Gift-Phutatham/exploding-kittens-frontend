@@ -54,6 +54,16 @@ class SocketioService {
     if (this.socket) this.socket.emit('game loop');
   }
 
+  playCard(cardIndex: number) {
+    if (this.socket) {
+      this.socket.emit('action', cardIndex);
+    }
+  }
+
+  endTurn() {
+    this.playCard(-1);
+  }
+
   disconnect() {
     if (this.socket) {
       this.socket.disconnect();

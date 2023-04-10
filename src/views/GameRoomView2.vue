@@ -49,7 +49,7 @@
           <div class="d-flex justify-center align-end">
             <v-col cols="1" v-for="(card, index) in cardsInHand" :key="index">
               <CardComponent
-                :disabled="hasDied || wrongTurn"
+                :disabled="hasDied || wrongTurn || waitingForNope"
                 :name="card"
                 :description="allCards[card].description"
                 :color="allCards[card].color"
@@ -65,9 +65,12 @@
         </v-col>
       </v-row>
       <v-bottom-navigation grow>
-        <EndTurnButton :disabled="hasDied || wrongTurn" @click="endTurn"></EndTurnButton>
+        <EndTurnButton
+          :disabled="hasDied || wrongTurn || waitingForNope"
+          @click="endTurn"
+        ></EndTurnButton>
         <PlayTwoOfAKindButton
-          :disabled="hasDied || !hasTwoOfAKind || wrongTurn"
+          :disabled="hasDied || !hasTwoOfAKind || wrongTurn || waitingForNope"
           @click="playTwoOfAKind"
         ></PlayTwoOfAKindButton>
         <PlayButton
@@ -75,7 +78,8 @@
             hasDied ||
             selectedIndex == -1 ||
             catCards.includes(cardsInHand[selectedIndex]) ||
-            wrongTurn
+            wrongTurn ||
+            waitingForNope
           "
           @click="playCard"
         ></PlayButton>
@@ -84,7 +88,6 @@
       </v-bottom-navigation>
     </div>
   </div>
-  <AttackDialog v-if="showAttackDialog" :card="attackCard" @attack="getAttackValue"></AttackDialog>
   <DefuseDialog
     v-if="showDefuseDialog"
     :card="defuseCard"
@@ -117,7 +120,6 @@ import ChatComponent from '@/components/ChatComponent.vue';
 import CardComponent from '@/components/CardComponent.vue';
 import PlayButton from '@/components/buttons/PlayButton.vue';
 import TimerComponent from '@/components/TimerComponent.vue';
-import AttackDialog from '@/components/dialogs/AttackDialog.vue';
 import DefuseDialog from '@/components/dialogs/DefuseDialog.vue';
 import EndTurnButton from '@/components/buttons/EndTurnButton.vue';
 import DrawPileComponent from '@/components/DrawPileComponent.vue';
@@ -138,7 +140,6 @@ export default {
 
     PlayButton,
     LogComponent,
-    AttackDialog,
     DefuseDialog,
     ChatComponent,
     CardComponent,
@@ -167,8 +168,10 @@ export default {
       hasDied: false,
       wrongTurn: true,
       cannotPlayNope: true,
+      waitingForNope: false,
       allCards: {},
       countDown: 30,
+      nopeTimeout: 5000,
       selectedIndex: -1,
       latestCard: '',
       toDrawCard: '',
@@ -177,12 +180,6 @@ export default {
 
       gameLogs: [],
       chats: [],
-
-      showAttackDialog: false,
-      attackCard: {
-        Attack: allCardsJson['Attack'],
-      },
-      attackValue: '',
 
       showDefuseDialog: false,
       defuseCard: {
@@ -283,10 +280,6 @@ export default {
           }
         }
 
-        if (this.latestCard === 'Attack' && this.cardsInHand.includes('Attack')) {
-          this.showAttackDialog = true;
-        }
-
         const catCardsCounts = this.catCards.reduce(
           (a, catCard) => ({
             ...a,
@@ -304,9 +297,6 @@ export default {
           this.selectedIndex = -1;
           this.hasTwoOfAKind = false;
           this.wrongTurn = true;
-          if (this.cardsInHand.includes('Nope')) {
-            this.cannotPlayNope = false;
-          }
         }
 
         this.showCreateRoom = false;
@@ -324,6 +314,12 @@ export default {
     selectCard(index: number) {
       this.selectedIndex = index;
     },
+    checkNope() {
+      if (this.cardsInHand.includes('Nope')) {
+        this.cannotPlayNope = false;
+        this.waitingForNope = true;
+      }
+    },
     playNope() {
       SocketioService.playNope();
     },
@@ -334,27 +330,29 @@ export default {
         this.showSeeTheFutureDialog = true;
       }
     },
-    playCard() {
+    async playCard() {
       if (this.selectedIndex !== -1) {
-        SocketioService.playCard(this.selectedIndex);
+        // this.checkNope();
+        // await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout));
+        // this.cannotPlayNope = true;
+        // this.waitingForNope = false;
         this.act(this.cardsInHand[this.selectedIndex]);
+        SocketioService.playCard(this.selectedIndex);
         this.selectedIndex = -1;
       }
     },
-    playTwoOfAKind() {
+    async playTwoOfAKind() {
       this.selectedIndex = -1;
+      // this.checkNope();
+      // await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout));
+      // this.cannotPlayNope = true;
+      // this.waitingForNope = false;
       this.showRandomCardDialog = true;
       SocketioService.playCard(this.cardsInHand.indexOf(this.firstTwoOfAKind));
     },
     endTurn() {
       this.selectedIndex = -1;
       SocketioService.endTurn();
-    },
-    getAttackValue(value: string) {
-      if (value === 'stack') {
-        SocketioService.playCard(this.cardsInHand.indexOf('Attack'));
-      }
-      this.showAttackDialog = false;
     },
     submitMessage(msg: string) {
       SocketioService.sendMessage(msg);

@@ -246,11 +246,26 @@ export default {
         this.gameLogs.push(msg);
       });
 
-      SocketioService.subscribeToNope(async (msg: any) => {
+      SocketioService.subscribeToNope(async () => {
+        this.selectedIndex = -1;
         this.beforeNope();
         await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout));
         this.afterNope();
-        // this.beforeNope();
+      });
+
+      SocketioService.subscribeToSeeFuture((msg: any) => {
+        this.topThreeCards = msg
+          .slice(0, 3)
+          .map((card: any) => card.name)
+          .reduce(
+            (accumulator: any, value: any) => ({ ...accumulator, [value]: allCardsJson[value] }),
+            {},
+          );
+        this.showSeeTheFutureDialog = true;
+      });
+
+      SocketioService.subscribeToRandomCard(() => {
+        this.showRandomCardDialog = true;
       });
 
       SocketioService.subscribeToGameState((state: any) => {
@@ -274,13 +289,6 @@ export default {
           this.latestCard = state.discardPile[state.discardPile.length - 1].name;
         }
         this.toDrawCard = state.deck.cards[0].name;
-        this.topThreeCards = state.deck.cards
-          .slice(0, 3)
-          .map((card: any) => card.name)
-          .reduce(
-            (accumulator: any, value: any) => ({ ...accumulator, [value]: allCardsJson[value] }),
-            {},
-          );
 
         if (this.toDrawCard === 'Exploded Kitten') {
           if (this.cardsInHand.includes('Defuse')) {
@@ -349,32 +357,15 @@ export default {
     playNope() {
       SocketioService.playNope();
     },
-    act(card: string) {
-      if (card === 'Favor') {
-        this.showRandomCardDialog = true;
-      } else if (card === 'See the Future') {
-        this.showSeeTheFutureDialog = true;
-      }
-    },
     async playCard() {
       if (this.selectedIndex !== -1) {
-        console.log(`>>>>> ${this.selectedIndex}`);
-        const current = this.cardsInHand[this.selectedIndex];
         SocketioService.playCard(this.selectedIndex);
-        this.selectedIndex = -1;
         await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout));
-        console.log(this.selectedIndex);
-        this.act(current); // TODO
       }
     },
     async playTwoOfAKind() {
       this.selectedIndex = -1;
       SocketioService.playCard(this.cardsInHand.indexOf(this.firstTwoOfAKind));
-      // this.beforeNope();
-      // await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout));
-      // this.afterNope();
-      this.showRandomCardDialog = true;
-      // SocketioService.playCard(this.cardsInHand.indexOf(this.firstTwoOfAKind));
     },
     endTurn() {
       this.selectedIndex = -1;

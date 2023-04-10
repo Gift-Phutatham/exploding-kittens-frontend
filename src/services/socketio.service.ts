@@ -53,6 +53,20 @@ class SocketioService {
     });
   }
 
+  subscribeToSeeFuture(callback: any) {
+    if (!this.socket) return true;
+    this.socket.on('see future', (msg: any) => {
+      return callback(msg);
+    });
+  }
+
+  subscribeToRandomCard(callback: any) {
+    if (!this.socket) return true;
+    this.socket.on('random card', (msg: any) => {
+      return callback(msg);
+    });
+  }
+
   sendMessage(message: any) {
     if (this.socket) this.socket.emit('message', message);
   }

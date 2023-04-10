@@ -324,32 +324,22 @@ export default {
     playTwoOfAKind() {
       this.selectedIndex = -1;
       this.showRandomCardDialog = true;
-      let catIndex: number = -1;
-      for (let i = 0; i < 2; i++) {
-        catIndex = this.cardsInHand.indexOf(this.firstTwoOfAKind);
-        this.cardsInHand.splice(catIndex, 1);
-      }
-      SocketioService.playCard(catIndex);
+      SocketioService.playCard(this.cardsInHand.indexOf(this.firstTwoOfAKind));
     },
     endTurn() {
       this.selectedIndex = -1;
+      SocketioService.endTurn();
       if (this.toDrawCard === 'Exploded Kitten') {
-        SocketioService.endTurn();
         if (this.cardsInHand.includes('Defuse')) {
           this.showDefuseDialog = true;
-          const defuseFirstIndex = this.cardsInHand.indexOf('Defuse');
-          this.cardsInHand.splice(defuseFirstIndex, 1);
-          this.latestCard = 'Defuse';
-          // this.toDrawCard = 'Attack'; // TOFIX
         } else {
           this.showExplodedDialog = true;
           this.hasDied = true;
-          this.latestCard = 'Exploding Kitten';
-          // this.toDrawCard = 'Attack'; // TOFIX
         }
       }
     },
     getAttackValue(value: string) {
+      // TOFIX
       if (value === 'stack') {
         const attackFirstIndex = this.cardsInHand.indexOf('Attack');
         this.cardsInHand.splice(attackFirstIndex, 1);

@@ -65,14 +65,17 @@
         </v-col>
       </v-row>
       <v-bottom-navigation grow>
-        <EndTurnButton :disabled="hasDied" @click="endTurn"></EndTurnButton>
+        <EndTurnButton :disabled="hasDied || wrongTurn" @click="endTurn"></EndTurnButton>
         <PlayTwoOfAKindButton
-          :disabled="hasDied || !hasTwoOfAKind"
+          :disabled="hasDied || !hasTwoOfAKind || wrongTurn"
           @click="playTwoOfAKind"
         ></PlayTwoOfAKindButton>
         <PlayButton
           :disabled="
-            hasDied || selectedIndex == -1 || catCards.includes(cardsInHand[selectedIndex])
+            hasDied ||
+            selectedIndex == -1 ||
+            catCards.includes(cardsInHand[selectedIndex]) ||
+            wrongTurn
           "
           @click="playCard"
         ></PlayButton>
@@ -93,8 +96,6 @@
   ></ExplodingKittenDialog>
   <RandomCardDialog
     v-if="showRandomCardDialog"
-    :cardName="randomCardName"
-    :card="randomCard"
     @onClose="showRandomCardDialog = false"
   ></RandomCardDialog>
   <SeeTheFutureDialog
@@ -199,8 +200,6 @@ export default {
         'Zombie Cat',
       ],
       showRandomCardDialog: false,
-      randomCardName: '',
-      randomCard: {},
       firstTwoOfAKind: '',
 
       showSeeTheFutureDialog: false,
@@ -310,10 +309,6 @@ export default {
     },
     act(card: string) {
       if (card === 'Favor') {
-        this.randomCardName = 'Favor'; // TOFIX
-        this.randomCard = {
-          Favor: allCardsJson['Favor'], // TOFIX
-        };
         this.showRandomCardDialog = true;
       } else if (card === 'See the Future') {
         this.showSeeTheFutureDialog = true;
@@ -328,15 +323,13 @@ export default {
     },
     playTwoOfAKind() {
       this.selectedIndex = -1;
-      this.randomCardName = 'Defuse'; // TOFIX
-      this.randomCard = {
-        Defuse: allCardsJson['Defuse'], // TOFIX
-      };
       this.showRandomCardDialog = true;
+      let catIndex: number = -1;
       for (let i = 0; i < 2; i++) {
-        const catIndex = this.cardsInHand.indexOf(this.firstTwoOfAKind);
+        catIndex = this.cardsInHand.indexOf(this.firstTwoOfAKind);
         this.cardsInHand.splice(catIndex, 1);
       }
+      SocketioService.playCard(catIndex);
     },
     endTurn() {
       this.selectedIndex = -1;
@@ -347,12 +340,12 @@ export default {
           const defuseFirstIndex = this.cardsInHand.indexOf('Defuse');
           this.cardsInHand.splice(defuseFirstIndex, 1);
           this.latestCard = 'Defuse';
-          this.toDrawCard = 'Attack'; // TOFIX
+          // this.toDrawCard = 'Attack'; // TOFIX
         } else {
           this.showExplodedDialog = true;
           this.hasDied = true;
           this.latestCard = 'Exploding Kitten';
-          this.toDrawCard = 'Attack'; // TOFIX
+          // this.toDrawCard = 'Attack'; // TOFIX
         }
       }
     },

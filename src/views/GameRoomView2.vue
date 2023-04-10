@@ -242,8 +242,8 @@ export default {
         console.log(state);
 
         const players = state.players
-          .filter((player: any) => player !== state.currentPlayer.name)
-          .map((player: any) => player.name);
+          .map((player: any) => player.name)
+          .filter((player: any) => player !== this.name);
         this.playerName1 = players[0];
         this.playerName2 = players[1];
         this.playerName3 = players[2];

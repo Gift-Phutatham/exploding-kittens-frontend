@@ -261,14 +261,23 @@ export default {
         if (state.discardPile.length > 0) {
           this.latestCard = state.discardPile[state.discardPile.length - 1].name;
         }
-        this.toDrawCard = state.deck.cards[state.deck.cards.length - 1].name;
+        this.toDrawCard = state.deck.cards[0].name;
         this.topThreeCards = state.deck.cards
-          .slice(state.deck.cards.length - 4, state.deck.cards.length - 1)
+          .slice(0, 3)
           .map((card: any) => card.name)
           .reduce(
             (accumulator: any, value: any) => ({ ...accumulator, [value]: allCardsJson[value] }),
             {},
           );
+
+        if (this.toDrawCard === 'Exploded Kitten') {
+          if (this.cardsInHand.includes('Defuse')) {
+            this.showDefuseDialog = true;
+          } else {
+            this.showExplodedDialog = true;
+            this.hasDied = true;
+          }
+        }
 
         if (this.latestCard === 'Attack' && this.cardsInHand.includes('Attack')) {
           this.showAttackDialog = true;
@@ -329,14 +338,6 @@ export default {
     endTurn() {
       this.selectedIndex = -1;
       SocketioService.endTurn();
-      if (this.toDrawCard === 'Exploded Kitten') {
-        if (this.cardsInHand.includes('Defuse')) {
-          this.showDefuseDialog = true;
-        } else {
-          this.showExplodedDialog = true;
-          this.hasDied = true;
-        }
-      }
     },
     getAttackValue(value: string) {
       // TOFIX

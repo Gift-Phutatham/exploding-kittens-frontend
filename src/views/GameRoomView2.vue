@@ -340,10 +340,8 @@ export default {
       SocketioService.endTurn();
     },
     getAttackValue(value: string) {
-      // TOFIX
       if (value === 'stack') {
-        const attackFirstIndex = this.cardsInHand.indexOf('Attack');
-        this.cardsInHand.splice(attackFirstIndex, 1);
+        SocketioService.playCard(this.cardsInHand.indexOf('Attack'));
       }
       this.showAttackDialog = false;
     },

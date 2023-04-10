@@ -46,7 +46,7 @@
           <div class="d-flex justify-center align-end">
             <v-col cols="1" v-for="(card, index) in cardsInHand" :key="index">
               <CardComponent
-                :disabled="hasDied"
+                :disabled="hasDied || wrongTurn"
                 :name="card"
                 :description="allCards[card].description"
                 :color="allCards[card].color"
@@ -158,6 +158,8 @@ export default {
       users: [],
 
       hasDied: false,
+      wrongTurn: false,
+      currentPlayer: '',
       allCards: {},
       countDown: 30,
       selectedIndex: -1,
@@ -195,11 +197,7 @@ export default {
       firstTwoOfAKind: '',
 
       showSeeTheFutureDialog: false,
-      topThreeCards: ['Exploding Kitten', 'Defuse', 'Attack'].reduce(
-        // TOFIX
-        (accumulator, value) => ({ ...accumulator, [value]: allCardsJson[value] }),
-        {},
-      ),
+      topThreeCards: {},
 
       playerName1: '',
       selectedCharacter1: 'src/assets/images/players/BlackCatPlayer.jpeg',
@@ -224,17 +222,24 @@ export default {
         name: this.name,
         roomID: this.roomId,
       });
+
       SocketioService.subscribeToRoom(this.roomId, (data: any) => {
         this.users = data;
-        console.log(this.users);
       });
+
       SocketioService.subscribeToGameState((state: any) => {
         console.log(state);
+
+        const players = state.players
+          .filter((player: any) => player !== state.currentPlayer.name)
+          .map((player: any) => player.name);
+        this.playerName1 = players[0];
+        this.playerName2 = players[1];
+        this.playerName3 = players[2];
+
         for (let i = 0; i < state.players.length; i++) {
           if (state.players[i].name === this.name) {
             this.cardsInHand = state.players[i].hand.map((card: any) => card.name);
-            console.log(state.players[i].hand.map((card: any) => card.name));
-
             break;
           }
         }
@@ -244,14 +249,15 @@ export default {
         this.toDrawCard = state.deck.cards[state.deck.cards.length - 1].name;
         this.topThreeCards = state.deck.cards
           .slice(state.deck.cards.length - 4, state.deck.cards.length - 1)
-          .map((card: any) => card.name);
+          .map((card: any) => card.name)
+          .reduce(
+            (accumulator: any, value: any) => ({ ...accumulator, [value]: allCardsJson[value] }),
+            {},
+          );
 
-        const players = state.players
-          .filter((player: any) => player !== state.currentPlayer.name)
-          .map((player) => player.name);
-        this.playerName1 = players[0];
-        this.playerName2 = players[1];
-        this.playerName3 = players[2];
+        if (this.name !== state.currentPlayer.name) {
+          this.wrongTurn = true;
+        }
 
         this.showCreateRoom = false;
       });
@@ -260,9 +266,6 @@ export default {
       this.showWaitingDialog = false;
       SocketioService.startGame();
       this.showCreateRoom = false;
-    },
-    createRoom() {
-      // Create the room logic here
     },
     checkCreateButtonState() {
       this.isCreateButtonEnabled = !!this.name && !!this.roomId && !!this.selectedCharacterSrc;

@@ -57,8 +57,8 @@
           </div>
         </v-col>
         <v-col class="mt-3" cols="2">
-          <ChatComponent></ChatComponent>
-          <LogComponent class="mt-6"></LogComponent>
+          <ChatComponent :submitMessageCallback="submitMessage" :chats="chats"></ChatComponent>
+          <LogComponent class="mt-6" :logs="gameLogs"></LogComponent>
         </v-col>
       </v-row>
       <v-bottom-navigation grow>
@@ -167,6 +167,9 @@ export default {
       toDrawCard: '',
       cardsInHand: [],
 
+      gameLogs: [],
+      chats: [],
+
       showAttackDialog: false,
       attackCard: {
         Attack: allCardsJson['Attack'],
@@ -225,6 +228,14 @@ export default {
 
       SocketioService.subscribeToRoom(this.roomId, (data: any) => {
         this.users = data;
+      });
+
+      SocketioService.subscribeToMessages((msg: any) => {
+        this.chats.push(msg);
+      });
+
+      SocketioService.subscribeToGameLog((msg: any) => {
+        this.gameLogs.push(msg);
       });
 
       SocketioService.subscribeToGameState((state: any) => {
@@ -344,6 +355,9 @@ export default {
         this.cardsInHand.splice(attackFirstIndex, 1);
       }
       this.showAttackDialog = false;
+    },
+    submitMessage(msg: string) {
+      SocketioService.sendMessage(msg);
     },
   },
 

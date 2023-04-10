@@ -17,8 +17,14 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'LogComponent',
-  data: () => ({
-    logs: [],
-  }),
+  props: {
+    logs: {
+      type: Array<string>,
+      required: true,
+    },
+  },
+  // data: () => ({
+  //   logs: [],
+  // }),
 });
 </script>

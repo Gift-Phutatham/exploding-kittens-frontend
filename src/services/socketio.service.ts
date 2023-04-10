@@ -1,6 +1,7 @@
 import { io } from 'socket.io-client';
 
 class SocketioService {
+  [x: string]: any;
   socket: any;
   constructor() {}
 
@@ -14,10 +15,11 @@ class SocketioService {
     console.log(`Connecting socket...`);
   }
 
-  subscribeToMessages(roomID: string) {
+  subscribeToMessages(callback: any) {
     if (!this.socket) return true;
     this.socket.on('message', (msg: any) => {
       console.log('Room event received!');
+      return callback(msg);
     });
   }
 
@@ -33,6 +35,13 @@ class SocketioService {
   subscribeToGameState(callback: any) {
     if (!this.socket) return true;
     this.socket.on('game state', (msg: any) => {
+      return callback(msg);
+    });
+  }
+
+  subscribeToGameLog(callback: any) {
+    if (!this.socket) return true;
+    this.socket.on('game log', (msg: any) => {
       return callback(msg);
     });
   }

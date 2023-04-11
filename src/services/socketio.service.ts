@@ -67,6 +67,13 @@ class SocketioService {
     });
   }
 
+  subscribeToTimer(callback: any) {
+    if (!this.socket) return true;
+    this.socket.on('timer', (msg: any) => {
+      return callback(msg);
+    });
+  }
+
   sendMessage(message: any) {
     if (this.socket) this.socket.emit('message', message);
   }

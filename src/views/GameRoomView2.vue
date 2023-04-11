@@ -14,7 +14,7 @@
         <v-col cols="10">
           <v-row>
             <v-col class="d-flex justify-start" cols="auto">
-              <TimerComponent :initialTime="countDown"></TimerComponent>
+              <div class="display-1 text-center">{{ count }}</div>
             </v-col>
             <v-col class="d-flex justify-center">
               <PlayerDisplay
@@ -119,7 +119,6 @@ import LogComponent from '@/components/LogComponent.vue';
 import ChatComponent from '@/components/ChatComponent.vue';
 import CardComponent from '@/components/CardComponent.vue';
 import PlayButton from '@/components/buttons/PlayButton.vue';
-import TimerComponent from '@/components/TimerComponent.vue';
 import DefuseDialog from '@/components/dialogs/DefuseDialog.vue';
 import EndTurnButton from '@/components/buttons/EndTurnButton.vue';
 import DrawPileComponent from '@/components/DrawPileComponent.vue';
@@ -145,7 +144,6 @@ export default {
     CardComponent,
     EndTurnButton,
     PlayerDisplay,
-    TimerComponent,
     PlayNopeButton,
     RandomCardDialog,
     DrawPileComponent,
@@ -168,14 +166,15 @@ export default {
       hasDied: false,
       wrongTurn: true,
       allCards: {},
-      countDown: 10,
-      nopeTimeout: 5,
       selectedIndex: -1,
       latestCard: '',
       toDrawCard: '',
       cardsInHand: [],
       diedPlayer: [],
       lastNopePlayer: '',
+
+      count: 0,
+      nopeTimeout: 5,
 
       disableCard: false,
       disableEndTurn: false,
@@ -269,6 +268,16 @@ export default {
         this.showRandomCardDialog = true;
       });
 
+      SocketioService.subscribeToTimer((msg: any) => {
+        console.log(msg);
+        if (+msg === 10) {
+          this.count = 10;
+          this.startTimer();
+        } else {
+          this.nopeTimeout = 5;
+        }
+      });
+
       SocketioService.subscribeToGameState((state: any) => {
         console.log(state);
 
@@ -321,8 +330,6 @@ export default {
 
         this.lastNopePlayer = state.lastNopePlayer.name;
 
-        this.countDown = 10;
-
         this.showCreateRoom = false;
       });
     },
@@ -333,6 +340,15 @@ export default {
     },
     checkCreateButtonState() {
       this.isCreateButtonEnabled = !!this.name && !!this.roomId && !!this.selectedCharacterSrc;
+    },
+
+    startTimer() {
+      setInterval(() => {
+        if (this.count > 0) {
+          this.count--;
+          console.log(`>>> ${this.count}`);
+        }
+      }, 1000);
     },
 
     selectCard(index: number) {

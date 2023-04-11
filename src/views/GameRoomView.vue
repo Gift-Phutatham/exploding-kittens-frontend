@@ -131,6 +131,10 @@ import PlayTwoOfAKindButton from '@/components/buttons/PlayTwoOfAKindButton.vue'
 import ExplodingKittenDialog from '@/components/dialogs/ExplodingKittenDialog.vue';
 import ReturnToHomePageButton from '@/components/buttons/ReturnToHomePageButton.vue';
 
+import OBCatPlayer from '@/assets/images/players/OBCatPlayer.jpeg';
+import GrayCatPlayer from '@/assets/images/players/GrayCatPlayer.jpeg';
+import BlackCatPlayer from '@/assets/images/players/BlackCatPlayer.jpeg';
+
 export default {
   name: 'GameRoom',
 
@@ -213,11 +217,11 @@ export default {
       topThreeCards: {},
 
       playerName1: '',
-      selectedCharacter1: 'src/assets/images/players/BlackCatPlayer.jpeg',
+      selectedCharacter1: OBCatPlayer,
       playerName2: '',
-      selectedCharacter2: 'src/assets/images/players/GrayCatPlayer.jpeg',
+      selectedCharacter2: GrayCatPlayer,
       playerName3: '',
-      selectedCharacter3: 'src/assets/images/players/OBCatPlayer.jpeg',
+      selectedCharacter3: BlackCatPlayer,
     };
   },
 

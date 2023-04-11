@@ -11,7 +11,7 @@
     "build-only": "vite build",
     "configure-husky": "npx husky install",
     "dev": "vite",
-    "start": "vite",
+    "start": "vite preview",
     "format": "prettier --write .",
     "preview": "vite preview",
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false"

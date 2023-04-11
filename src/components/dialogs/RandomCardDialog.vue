@@ -1,12 +1,12 @@
 <template>
-  <v-dialog v-model="openDialog" persistent width="750">
+  <v-dialog v-model="openDialog" width="750">
     <v-card>
       <v-toolbar height="80" :color="themeColor">
         <v-col class="d-flex justify-space-around">
           <v-icon icon="mdi-heart" size="55" color="white"></v-icon>
         </v-col>
       </v-toolbar>
-      <v-card-text class="text-center mx-3">
+      <v-card-text class="text-center my-13">
         <v-row>
           <v-col class="d-flex align-center justify-center text-h6 font-weight-regular">
             You got a card from another player.

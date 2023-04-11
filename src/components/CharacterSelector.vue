@@ -42,24 +42,26 @@
   </v-card>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import BlackCatPlayer from '@/assets/images/players/BlackCatPlayer.jpeg';
 import GrayCatPlayer from '@/assets/images/players/GrayCatPlayer.jpeg';
 import OBCatPlayer from '@/assets/images/players/OBCatPlayer.jpeg';
 import OrangeCatPlayer from '@/assets/images/players/OrangeCatPlayer.jpeg';
 
-export default {
+export default defineComponent({
+  name: 'CharacterSelector',
   data() {
     return {
       blackCatPlayer: BlackCatPlayer,
       grayCatPlayer: GrayCatPlayer,
       obCatPlayer: OBCatPlayer,
       orangeCatPlayer: OrangeCatPlayer,
-      selectedCharacter: null,
+      selectedCharacter: null as number | null,
     };
   },
   methods: {
-    selectCharacter(character) {
+    selectCharacter(character: number) {
       this.selectedCharacter = character;
       this.$emit('select-character', this.getSelectedCharacterSrc());
     },
@@ -78,7 +80,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <style scoped>

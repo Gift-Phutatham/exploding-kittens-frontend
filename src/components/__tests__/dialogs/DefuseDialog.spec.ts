@@ -1,15 +1,15 @@
 import { describe, it, expect } from 'vitest';
 
 import { mount } from '@vue/test-utils';
-import RandomCardDialog from '@/components/dialogs/RandomCardDialog.vue';
+import DefuseDialog from '@/components/dialogs/DefuseDialog.vue';
 
 import { createVuetify } from 'vuetify';
 
-describe('RandomCardDialog', () => {
+describe('DefuseDialog', () => {
   const vuetify = createVuetify();
 
   it('renders properly', () => {
-    const wrapper = mount(RandomCardDialog, {
+    const wrapper = mount(DefuseDialog, {
       global: {
         plugins: [vuetify],
       },
@@ -23,7 +23,7 @@ describe('RandomCardDialog', () => {
   });
 
   it('emits onClose event and closes dialog when "Done" button is clicked', async () => {
-    const wrapper = mount(RandomCardDialog, {
+    const wrapper = mount(DefuseDialog, {
       global: {
         plugins: [vuetify],
       },

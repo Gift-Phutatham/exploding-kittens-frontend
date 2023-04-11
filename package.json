@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vite preview",
-    "start": "vite preview --port 4173",
+    "start": "vite preview --port 80",
     "build": "vite build",
     "test:unit": "vitest",
     "test:e2e": "playwright test",

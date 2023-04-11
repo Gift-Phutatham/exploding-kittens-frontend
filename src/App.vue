@@ -1,4 +1,5 @@
 <template>
+  <RandomCardDialog></RandomCardDialog>
   <v-app>
     <v-main>
       <router-view />
@@ -7,8 +8,13 @@
 </template>
 
 <script>
+import RandomCardDialog from '@/components/dialogs/RandomCardDialog.vue';
+
 export default {
   name: 'App',
+  components: {
+    RandomCardDialog,
+  },
   data: () => ({
     //
   }),

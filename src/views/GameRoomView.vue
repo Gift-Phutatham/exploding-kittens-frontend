@@ -1,6 +1,6 @@
 <template>
   <div class="bg-image">
-    <div v-if="showCreateRoom" class="create-room-wrapper">
+    <div v-if="!showCreateRoom" class="create-room-wrapper">
       <CreateRoomBox @create-room="onCreateRoom" :disable-create-button="!isCreateButtonEnabled" />
       <WaitingDialog
         v-if="showWaitingDialog"
@@ -13,16 +13,18 @@
       <v-row>
         <v-col cols="10">
           <v-row>
-            <v-col class="d-flex justify-start" cols="auto">
-              <div class="text-center">Timer: {{ count }}</div>
-              <div class="text-center">Timer for Nope: {{ nopeCount }}</div>
-            </v-col>
-            <v-col class="d-flex justify-center">
+            <v-col class="d-flex justify-center ms-16">
               <PlayerDisplay
                 :name="playerName1"
                 :selectedCharacterSrc="selectedCharacter1"
                 :diedPlayer="diedPlayer"
               ></PlayerDisplay>
+            </v-col>
+            <v-col class="d-flex justify-end" cols="auto">
+              <v-col class="text-end">
+                <p class="text-subtitle-1">Timer: {{ count }}</p>
+                <p class="text-subtitle-1">Nope Timer: {{ nopeCount }}</p>
+              </v-col>
             </v-col>
           </v-row>
           <div class="d-flex justify-space-between align-center center">

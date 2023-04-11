@@ -70,7 +70,7 @@ export default defineComponent({
 }
 
 .v-card-item {
-  padding: 0 15px 10px;
+  padding: 0 16px 10px;
 }
 
 .v-banner {

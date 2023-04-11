@@ -2,6 +2,10 @@ import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import CharacterSelector from '../CharacterSelector.vue';
 import { createVuetify } from 'vuetify';
+import BlackCatPlayer from '@/assets/images/players/BlackCatPlayer.jpeg';
+import GrayCatPlayer from '@/assets/images/players/GrayCatPlayer.jpeg';
+import OBCatPlayer from '@/assets/images/players/OBCatPlayer.jpeg';
+import OrangeCatPlayer from '@/assets/images/players/OrangeCatPlayer.jpeg';
 
 describe('CharacterSelector', () => {
   const vuetify = createVuetify();
@@ -12,27 +16,46 @@ describe('CharacterSelector', () => {
         plugins: [vuetify],
       },
     });
+
     expect(wrapper.exists()).toBe(true);
+    expect(wrapper.find('.card-style').exists()).toBe(true);
+    expect(wrapper.find('.card-title-style').text()).toBe('Select Character');
+    expect(wrapper.findAll('.character-card')).toHaveLength(4);
   });
 
-  it('emits select-character event on character selection', async () => {
+  it('emits select-character event with correct image source when character card is clicked', async () => {
     const wrapper = mount(CharacterSelector, {
       global: {
         plugins: [vuetify],
       },
     });
-    await wrapper.find('.character-card:nth-child(2)').trigger('click');
-    expect(wrapper.emitted()['select-character']![0][0]).toContain('GrayCatPlayer.jpeg');
-  });
 
-  it('applies selected class on character selection', async () => {
-    const wrapper = mount(CharacterSelector, {
-      global: {
-        plugins: [vuetify],
-      },
-    });
-    expect(wrapper.find('.character-card.selected').exists()).toBe(false);
-    await wrapper.find('.character-card:nth-child(3)').trigger('click');
-    expect(wrapper.find('.character-card.selected').exists()).toBe(true);
+    // Simulate clicking the first character card
+    await wrapper.findAll('.character-card')[0].trigger('click');
+
+    // Ensure selected character is set to 1 and the event was emitted with the correct image source
+    expect(wrapper.vm.selectedCharacter).toBe(1);
+    expect(wrapper.emitted('select-character')![0][0]).toBe(BlackCatPlayer);
+
+    // Simulate clicking the second character card
+    await wrapper.findAll('.character-card')[1].trigger('click');
+
+    // Ensure selected character is set to 2 and the event was emitted with the correct image source
+    expect(wrapper.vm.selectedCharacter).toBe(2);
+    expect(wrapper.emitted('select-character')![1][0]).toBe(GrayCatPlayer);
+
+    // Simulate clicking the third character card
+    await wrapper.findAll('.character-card')[2].trigger('click');
+
+    // Ensure selected character is set to 3 and the event was emitted with the correct image source
+    expect(wrapper.vm.selectedCharacter).toBe(3);
+    expect(wrapper.emitted('select-character')![2][0]).toBe(OBCatPlayer);
+
+    // Simulate clicking the forth character card
+    await wrapper.findAll('.character-card')[3].trigger('click');
+
+    // Ensure selected character is set to 4 and the event was emitted with the correct image source
+    expect(wrapper.vm.selectedCharacter).toBe(4);
+    expect(wrapper.emitted('select-character')![3][0]).toBe(OrangeCatPlayer);
   });
 });

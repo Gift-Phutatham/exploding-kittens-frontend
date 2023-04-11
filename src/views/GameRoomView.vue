@@ -248,7 +248,8 @@ export default {
         this.gameLogs.push(msg);
       });
 
-      SocketioService.subscribeToNope(async () => {
+      SocketioService.subscribeToNope(async (msg: any) => {
+        this.lastNopePlayer = msg[1].name;
         this.selectedIndex = -1;
         this.beforeNope();
         await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout * 1000));
@@ -328,8 +329,6 @@ export default {
           this.hasTwoOfAKind = false;
           this.wrongTurn = true;
         }
-
-        this.lastNopePlayer = state.lastNopePlayer.name;
 
         this.showCreateRoom = false;
       });

@@ -6,8 +6,7 @@ class SocketioService {
   constructor() {}
 
   setupSocketConnection(token: any) {
-    // TODO: Fix this hardcade port address
-    this.socket = io('http://localhost:3000', {
+    this.socket = io(import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000', {
       auth: {
         token,
       },

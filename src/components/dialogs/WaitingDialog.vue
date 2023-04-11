@@ -30,7 +30,6 @@ export default defineComponent({
     start() {
       this.$emit('start');
       this.openDialog = false;
-      this.$router.replace('/GameRoom');
     },
   },
 });

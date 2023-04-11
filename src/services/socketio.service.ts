@@ -6,28 +6,25 @@ class SocketioService {
   constructor() {}
 
   setupSocketConnection(token: any) {
+    // TODO: Fix this hardcade port address
     this.socket = io('http://localhost:3000', {
-      // TODO: Fix this hardcade port address
       auth: {
         token,
       },
     });
-    console.log(`Connecting socket...`);
   }
 
   subscribeToMessages(callback: any) {
     if (!this.socket) return true;
     this.socket.on('message', (msg: any) => {
-      console.log('Room event received!');
       return callback(msg);
     });
   }
 
   subscribeToRoom(roomID: string, callback: any) {
     if (!this.socket) return true;
-    this.socket.emit('join room', roomID); // join the specific room
+    this.socket.emit('join room', roomID); // Join the specific room
     this.socket.on('join room', (msg: any) => {
-      console.log('Room event received!');
       return callback(msg);
     });
   }

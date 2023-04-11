@@ -1,6 +1,6 @@
 <template>
   <div class="bg-image">
-    <div v-if="!showCreateRoom" class="create-room-wrapper">
+    <div v-if="showCreateRoom" class="create-room-wrapper">
       <CreateRoomBox @create-room="onCreateRoom" :disable-create-button="!isCreateButtonEnabled" />
       <WaitingDialog
         v-if="showWaitingDialog"
@@ -13,18 +13,16 @@
       <v-row>
         <v-col cols="10">
           <v-row>
-            <v-col class="d-flex justify-center ms-16">
+            <v-col class="timer text-subtitle-1 ms-3 mt-3">
+              <p><span class="font-weight-bold">Timer:</span> {{ count }}</p>
+              <p><span class="font-weight-bold">Nope Timer:</span> {{ nopeCount }}</p>
+            </v-col>
+            <v-col class="d-flex justify-center">
               <PlayerDisplay
                 :name="playerName1"
                 :selectedCharacterSrc="selectedCharacter1"
                 :diedPlayer="diedPlayer"
               ></PlayerDisplay>
-            </v-col>
-            <v-col class="d-flex justify-end" cols="auto">
-              <v-col class="text-end">
-                <p class="text-subtitle-1">Timer: {{ count }}</p>
-                <p class="text-subtitle-1">Nope Timer: {{ nopeCount }}</p>
-              </v-col>
             </v-col>
           </v-row>
           <div class="d-flex justify-space-between align-center center">
@@ -87,7 +85,7 @@
           @click="playCard"
         ></PlayButton>
         <PlayNopeButton :disabled="hasDied || disablePlayNope" @click="playNope"></PlayNopeButton>
-        <ReturnToHomePageButton></ReturnToHomePageButton>
+        <ReturnToHomePageButton class="home-page-button"></ReturnToHomePageButton>
       </v-bottom-navigation>
     </div>
   </div>
@@ -429,5 +427,14 @@ export default {
 
 .center {
   height: 52.5%;
+}
+
+.timer {
+  position: absolute;
+}
+
+.home-page-button {
+  position: absolute;
+  right: 1%;
 }
 </style>

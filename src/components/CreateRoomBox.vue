@@ -37,15 +37,21 @@
   </v-card>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import CharacterSelector from '@/components/CharacterSelector.vue';
 
-export default {
+export default defineComponent({
   name: 'CreateRoomBox',
   components: {
     CharacterSelector,
   },
-  data() {
+  data(): {
+    name: string;
+    roomId: string;
+    selectedCharacterSrc: string | null;
+    isFormValid: boolean;
+  } {
     return {
       name: '',
       roomId: '',
@@ -54,7 +60,7 @@ export default {
     };
   },
   methods: {
-    handleSelectCharacter(selectedCharacterSrc) {
+    handleSelectCharacter(selectedCharacterSrc: string) {
       this.selectedCharacterSrc = selectedCharacterSrc;
     },
     emitCreateRoom() {
@@ -67,17 +73,17 @@ export default {
     },
   },
   watch: {
-    name(newValue) {
+    name(newValue: string) {
       this.isFormValid = Boolean(newValue && this.roomId && this.selectedCharacterSrc);
     },
-    roomId(newValue) {
+    roomId(newValue: string) {
       this.isFormValid = Boolean(newValue && this.name && this.selectedCharacterSrc);
     },
-    selectedCharacterSrc(newValue) {
+    selectedCharacterSrc(newValue: string | null) {
       this.isFormValid = Boolean(newValue && this.name && this.roomId);
     },
   },
-};
+});
 </script>
 
 <style scoped>

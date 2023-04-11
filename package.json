@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vite preview",
-    "start": "vite preview --port $PORT",
+    "start": "vite preview --port $PORT --host 0.0.0.0",
     "build": "vite build",
     "test:unit": "vitest",
     "test:e2e": "playwright test",

@@ -39,16 +39,20 @@
     "description": "( ˇ෴ˇ )",
     "color": "#A6A6A6"
   },
-  "Hairly Potato Cat": {
+  "Hairy Potato Cat": {
     "description": "ᕙ(⇀‸↼‶)ᕗ",
     "color": "#A6A6A6"
   },
-  "TacocaT": {
+  "Tacocat": {
     "description": "I am a palindrome!",
     "color": "#A6A6A6"
   },
-  "Rainbow-Ral Phing Cat": {
+  "Rainbow-Ralphing Cat": {
     "description": "(づ ◕‿◕ )づ",
+    "color": "#A6A6A6"
+  },
+  "Zombie Cat": {
+    "description": "Hello World",
     "color": "#A6A6A6"
   }
 }

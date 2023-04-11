@@ -1,16 +1,27 @@
 <template>
   <div class="bg-image">
-    <div class="container">
+    <div v-if="showCreateRoom" class="create-room-wrapper">
+      <CreateRoomBox @create-room="onCreateRoom" :disable-create-button="!isCreateButtonEnabled" />
+      <WaitingDialog
+        v-if="showWaitingDialog"
+        :disableStart="users.length != 4"
+        @start="startGame"
+      ></WaitingDialog>
+    </div>
+
+    <div v-else class="container">
       <v-row>
         <v-col cols="10">
           <v-row>
             <v-col class="d-flex justify-start" cols="auto">
-              <TimerComponent :initialTime="30"></TimerComponent>
+              <div class="text-center">Timer: {{ count }}</div>
+              <div class="text-center">Timer for Nope: {{ nopeCount }}</div>
             </v-col>
             <v-col class="d-flex justify-center">
               <PlayerDisplay
                 :name="playerName1"
                 :selectedCharacterSrc="selectedCharacter1"
+                :diedPlayer="diedPlayer"
               ></PlayerDisplay>
             </v-col>
           </v-row>
@@ -18,10 +29,12 @@
             <PlayerDisplay
               :name="playerName2"
               :selectedCharacterSrc="selectedCharacter2"
+              :diedPlayer="diedPlayer"
             ></PlayerDisplay>
             <v-row class="d-flex justify-center align-end">
               <DrawPileComponent></DrawPileComponent>
               <CardComponent
+                v-if="latestCard"
                 class="ml-3"
                 :name="latestCard"
                 :description="allCards[latestCard].description"
@@ -31,12 +44,13 @@
             <PlayerDisplay
               :name="playerName3"
               :selectedCharacterSrc="selectedCharacter3"
+              :diedPlayer="diedPlayer"
             ></PlayerDisplay>
           </div>
           <div class="d-flex justify-center align-end">
             <v-col cols="1" v-for="(card, index) in cardsInHand" :key="index">
               <CardComponent
-                :disabled="hasDied"
+                :disabled="hasDied || wrongTurn || disableCard"
                 :name="card"
                 :description="allCards[card].description"
                 :color="allCards[card].color"
@@ -47,27 +61,34 @@
           </div>
         </v-col>
         <v-col class="mt-3" cols="2">
-          <ChatComponent></ChatComponent>
-          <LogComponent class="mt-6"></LogComponent>
+          <ChatComponent :submitMessageCallback="submitMessage" :chats="chats"></ChatComponent>
+          <LogComponent class="mt-6" :logs="gameLogs"></LogComponent>
         </v-col>
       </v-row>
       <v-bottom-navigation grow>
-        <EndTurnButton :disabled="hasDied" @click="endTurn"></EndTurnButton>
+        <EndTurnButton
+          :disabled="hasDied || wrongTurn || disableEndTurn"
+          @click="endTurn"
+        ></EndTurnButton>
         <PlayTwoOfAKindButton
-          :disabled="hasDied || !hasTwoOfAKind"
+          :disabled="hasDied || !hasTwoOfAKind || wrongTurn || disablePlayTwoOfAKind"
           @click="playTwoOfAKind"
         ></PlayTwoOfAKindButton>
         <PlayButton
           :disabled="
-            hasDied || selectedIndex == -1 || catCards.includes(cardsInHand[selectedIndex])
+            hasDied ||
+            selectedIndex == -1 ||
+            catCards.includes(cardsInHand[selectedIndex]) ||
+            wrongTurn ||
+            disablePlay
           "
           @click="playCard"
         ></PlayButton>
+        <PlayNopeButton :disabled="hasDied || disablePlayNope" @click="playNope"></PlayNopeButton>
         <ReturnToHomePageButton></ReturnToHomePageButton>
       </v-bottom-navigation>
     </div>
   </div>
-  <AttackDialog v-if="showAttackDialog" :card="attackCard" @attack="getAttackValue"></AttackDialog>
   <DefuseDialog
     v-if="showDefuseDialog"
     :card="defuseCard"
@@ -80,8 +101,6 @@
   ></ExplodingKittenDialog>
   <RandomCardDialog
     v-if="showRandomCardDialog"
-    :cardName="randomCardName"
-    :card="randomCard"
     @onClose="showRandomCardDialog = false"
   ></RandomCardDialog>
   <SeeTheFutureDialog
@@ -92,17 +111,20 @@
 </template>
 
 <script lang="ts">
+import CreateRoomBox from '@/components/CreateRoomBox.vue';
+import WaitingDialog from '@/components/dialogs/WaitingDialog.vue';
+import SocketioService from '@/services/socketio.service.ts';
+
 import allCardsJson from '@/assets/allCards.json';
 import LogComponent from '@/components/LogComponent.vue';
 import ChatComponent from '@/components/ChatComponent.vue';
 import CardComponent from '@/components/CardComponent.vue';
 import PlayButton from '@/components/buttons/PlayButton.vue';
-import TimerComponent from '@/components/TimerComponent.vue';
-import AttackDialog from '@/components/dialogs/AttackDialog.vue';
 import DefuseDialog from '@/components/dialogs/DefuseDialog.vue';
 import EndTurnButton from '@/components/buttons/EndTurnButton.vue';
 import DrawPileComponent from '@/components/DrawPileComponent.vue';
 import PlayerDisplay from '@/components/PlayerDisplayComponent.vue';
+import PlayNopeButton from '@/components/buttons/PlayNopeButton.vue';
 import RandomCardDialog from '@/components/dialogs/RandomCardDialog.vue';
 import SeeTheFutureDialog from '@/components/dialogs/SeeTheFutureDialog.vue';
 import PlayTwoOfAKindButton from '@/components/buttons/PlayTwoOfAKindButton.vue';
@@ -113,15 +135,17 @@ export default {
   name: 'GameRoom',
 
   components: {
+    CreateRoomBox,
+    WaitingDialog,
+
     PlayButton,
     LogComponent,
-    AttackDialog,
     DefuseDialog,
     ChatComponent,
     CardComponent,
     EndTurnButton,
     PlayerDisplay,
-    TimerComponent,
+    PlayNopeButton,
     RandomCardDialog,
     DrawPileComponent,
     SeeTheFutureDialog,
@@ -132,30 +156,36 @@ export default {
 
   data() {
     return {
-      hasDied: false,
-      allCards: {},
-      countDown: 30,
-      selectedIndex: -1,
-      latestCard: 'See the Future', // TOFIX
-      toDrawCard: 'Exploded Kitten', // TOFIX
-      cardsInHand: [
-        // TOFIX
-        'TacocaT',
-        'TacocaT',
-        'Cattermelon',
-        'Cattermelon',
-        'Skip',
-        'Nope',
-        'See the Future',
-        'Favor',
-        'Attack',
-      ],
+      showCreateRoom: true,
+      name: '',
+      roomId: '',
+      showWaitingDialog: false,
+      selectedCharacterSrc: null,
+      isCreateButtonEnabled: false,
+      users: [],
 
-      showAttackDialog: false,
-      attackCard: {
-        Attack: allCardsJson['Attack'],
-      },
-      attackValue: '',
+      hasDied: false,
+      wrongTurn: true,
+      allCards: {},
+      selectedIndex: -1,
+      latestCard: '',
+      toDrawCard: '',
+      cardsInHand: [],
+      diedPlayer: [],
+      lastNopePlayer: '',
+
+      count: 0,
+      nopeCount: 0,
+      nopeTimeout: 5,
+
+      disableCard: false,
+      disableEndTurn: false,
+      disablePlayTwoOfAKind: false,
+      disablePlay: false,
+      disablePlayNope: true,
+
+      gameLogs: [],
+      chats: [],
 
       showDefuseDialog: false,
       defuseCard: {
@@ -171,129 +201,219 @@ export default {
       catCards: [
         'Cattermelon',
         'Beard Cat',
-        'Hairly Potato Cat',
-        'TacocaT',
-        'Rainbow-Ral Phing Cat',
+        'Hairy Potato Cat',
+        'Tacocat',
+        'Rainbow-Ralphing Cat',
+        'Zombie Cat',
       ],
       showRandomCardDialog: false,
-      randomCardName: '',
-      randomCard: {},
       firstTwoOfAKind: '',
 
       showSeeTheFutureDialog: false,
-      topThreeCards: ['Exploding Kitten', 'Defuse', 'Attack'].reduce(
-        // TOFIX
-        (accumulator, value) => ({ ...accumulator, [value]: allCardsJson[value] }),
-        {},
-      ),
+      topThreeCards: {},
 
-      // TOFIX
-      playerName1: 'hello 1',
+      playerName1: '',
       selectedCharacter1: 'src/assets/images/players/BlackCatPlayer.jpeg',
-      playerName2: 'hello 2',
+      playerName2: '',
       selectedCharacter2: 'src/assets/images/players/GrayCatPlayer.jpeg',
-      playerName3: 'hello 3',
+      playerName3: '',
       selectedCharacter3: 'src/assets/images/players/OBCatPlayer.jpeg',
     };
   },
 
   methods: {
-    countDownTimer() {
-      if (this.countDown > 0) {
-        setTimeout(() => {
-          this.countDown -= 1;
-          this.countDownTimer();
-        }, 1000);
-      } else {
-        this.countDown = 30;
-      }
+    onCreateRoom(roomData: any) {
+      // Update the name and roomId data
+      this.name = roomData.name;
+      this.roomId = roomData.roomId;
+      this.selectedCharacterSrc = roomData.selectedCharacterSrc;
+      this.checkCreateButtonState();
+      this.showWaitingDialog = true;
+
+      // connecting to socket server
+      SocketioService.setupSocketConnection({
+        name: this.name,
+        roomID: this.roomId,
+      });
+
+      SocketioService.subscribeToRoom(this.roomId, (data: any) => {
+        this.users = data;
+      });
+
+      SocketioService.subscribeToMessages((msg: any) => {
+        this.chats.push(msg);
+      });
+
+      SocketioService.subscribeToGameLog((msg: any) => {
+        this.gameLogs.push(msg);
+      });
+
+      SocketioService.subscribeToNope(async () => {
+        this.selectedIndex = -1;
+        this.beforeNope();
+        await new Promise((resolve) => setTimeout(resolve, this.nopeTimeout * 1000));
+        this.afterNope();
+      });
+
+      SocketioService.subscribeToSeeFuture((msg: any) => {
+        this.topThreeCards = msg
+          .slice(0, 3)
+          .map((card: any) => card.name)
+          .reduce(
+            (accumulator: any, value: any) => ({ ...accumulator, [value]: allCardsJson[value] }),
+            {},
+          );
+        this.showSeeTheFutureDialog = true;
+      });
+
+      SocketioService.subscribeToRandomCard(() => {
+        this.showRandomCardDialog = true;
+      });
+
+      this.startTimer();
+      this.startNopeTimer();
+
+      SocketioService.subscribeToTimer((msg: any) => {
+        if (+msg === 10) {
+          this.count = 10;
+        } else {
+          this.nopeCount = 5;
+        }
+      });
+
+      SocketioService.subscribeToGameState((state: any) => {
+        console.log(state);
+
+        const players = state.allPlayers
+          .map((player: any) => player.name)
+          .filter((player: any) => player !== this.name);
+        this.playerName1 = players[0];
+        this.playerName2 = players[1];
+        this.playerName3 = players[2];
+        this.diedPlayer = state.diedPlayer.map((players: any) => players.name);
+
+        for (let i = 0; i < state.allPlayers.length; i++) {
+          if (state.allPlayers[i].name === this.name) {
+            this.cardsInHand = state.allPlayers[i].hand.map((card: any) => card.name);
+            break;
+          }
+        }
+        if (state.discardPile.length > 0) {
+          this.latestCard = state.discardPile[state.discardPile.length - 1].name;
+        }
+        this.toDrawCard = state.deck.cards[0].name;
+
+        if (this.toDrawCard === 'Exploded Kitten') {
+          if (this.cardsInHand.includes('Defuse')) {
+            this.showDefuseDialog = true;
+          } else {
+            this.showExplodedDialog = true;
+            this.hasDied = true;
+          }
+        }
+
+        const catCardsCounts = this.catCards.reduce(
+          (a, catCard) => ({
+            ...a,
+            [catCard]: this.cardsInHand.filter((cardInHand) => cardInHand == catCard).length,
+          }),
+          {},
+        );
+        this.firstTwoOfAKind = this.catCards.find((catCard) => catCardsCounts[catCard] > 1) || '';
+        this.hasTwoOfAKind = this.firstTwoOfAKind !== '';
+
+        if (this.name === state.currentPlayer.name) {
+          this.wrongTurn = false;
+          this.disablePlayNope = true;
+        } else {
+          this.selectedIndex = -1;
+          this.hasTwoOfAKind = false;
+          this.wrongTurn = true;
+        }
+
+        this.lastNopePlayer = state.lastNopePlayer.name;
+
+        this.showCreateRoom = false;
+      });
     },
+    startGame() {
+      this.showWaitingDialog = false;
+      SocketioService.startGame();
+      this.showCreateRoom = false;
+    },
+    checkCreateButtonState() {
+      this.isCreateButtonEnabled = !!this.name && !!this.roomId && !!this.selectedCharacterSrc;
+    },
+
+    startTimer() {
+      setInterval(() => {
+        if (this.count > 0) {
+          this.count--;
+        }
+      }, 1000);
+    },
+    startNopeTimer() {
+      setInterval(() => {
+        if (this.nopeCount > 0) {
+          this.nopeCount--;
+        }
+      }, 1000);
+    },
+
     selectCard(index: number) {
       this.selectedIndex = index;
     },
-    checkAttack() {
-      if (this.latestCard === 'Attack' && this.cardsInHand.includes('Attack')) {
-        this.showAttackDialog = true;
+    beforeNope() {
+      this.disableCard = true;
+      this.disableEndTurn = true;
+      this.disablePlayTwoOfAKind = true;
+      this.disablePlay = true;
+      if (this.cardsInHand.includes('Nope') && this.name !== this.lastNopePlayer) {
+        this.disablePlayNope = false;
       }
     },
-    checkTwoOfAKind() {
-      const catCardsCounts = this.catCards.reduce(
-        (a, catCard) => ({
-          ...a,
-          [catCard]: this.cardsInHand.filter((cardInHand) => cardInHand == catCard).length,
-        }),
-        {},
-      );
-      this.firstTwoOfAKind = this.catCards.find((catCard) => catCardsCounts[catCard] > 1) || '';
-      this.hasTwoOfAKind = this.firstTwoOfAKind !== '';
+    afterNope() {
+      this.disableCard = false;
+      this.disableEndTurn = false;
+      this.disablePlayTwoOfAKind = false;
+      this.disablePlay = false;
+      this.disablePlayNope = true;
     },
-    act(card: string) {
-      if (card === 'Favor') {
-        this.randomCardName = 'Favor'; // TOFIX
-        this.randomCard = {
-          Favor: allCardsJson['Favor'], // TOFIX
-        };
-        this.showRandomCardDialog = true;
-      } else if (card === 'See the Future') {
-        this.showSeeTheFutureDialog = true;
-      }
+    playNope() {
+      SocketioService.playNope(this.name);
     },
-    playCard() {
+    async playCard() {
       if (this.selectedIndex !== -1) {
-        this.act(this.cardsInHand[this.selectedIndex]);
-        this.cardsInHand.splice(this.selectedIndex, 1);
-        this.selectedIndex = -1;
+        SocketioService.playCard(this.selectedIndex);
       }
     },
-    playTwoOfAKind() {
+    async playTwoOfAKind() {
       this.selectedIndex = -1;
-      this.randomCardName = 'Defuse'; // TOFIX
-      this.randomCard = {
-        Defuse: allCardsJson['Defuse'], // TOFIX
-      };
-      this.showRandomCardDialog = true;
-      for (let i = 0; i < 2; i++) {
-        const catIndex = this.cardsInHand.indexOf(this.firstTwoOfAKind);
-        this.cardsInHand.splice(catIndex, 1);
-      }
-      this.checkTwoOfAKind();
+      SocketioService.playCard(this.cardsInHand.indexOf(this.firstTwoOfAKind));
     },
     endTurn() {
       this.selectedIndex = -1;
-      if (this.toDrawCard === 'Exploded Kitten') {
-        if (this.cardsInHand.includes('Defuse')) {
-          this.showDefuseDialog = true;
-          const defuseFirstIndex = this.cardsInHand.indexOf('Defuse');
-          this.cardsInHand.splice(defuseFirstIndex, 1);
-          this.latestCard = 'Defuse';
-          this.toDrawCard = 'Attack'; // TOFIX
-        } else {
-          this.showExplodedDialog = true;
-          this.hasDied = true;
-          this.latestCard = 'Exploding Kitten';
-          this.toDrawCard = 'Attack'; // TOFIX
-        }
-      }
+      SocketioService.endTurn();
     },
-    getAttackValue(value: string) {
-      if (value === 'stack') {
-        const attackFirstIndex = this.cardsInHand.indexOf('Attack');
-        this.cardsInHand.splice(attackFirstIndex, 1);
-      }
-      this.showAttackDialog = false;
+    submitMessage(msg: string) {
+      SocketioService.sendMessage(msg);
     },
   },
 
   created() {
     this.allCards = allCardsJson;
-    this.countDownTimer();
-    this.checkAttack();
-    this.checkTwoOfAKind();
   },
 };
 </script>
 
 <style scoped>
+.create-room-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
 .bg-image {
   background-image: url('@/assets/background/gameroom.jpg');
 }

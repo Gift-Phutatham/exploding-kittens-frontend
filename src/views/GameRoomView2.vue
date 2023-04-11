@@ -14,7 +14,7 @@
         <v-col cols="10">
           <v-row>
             <v-col class="d-flex justify-start" cols="auto">
-              <TimerComponent :initialTime="30"></TimerComponent>
+              <TimerComponent :initialTime="countDown"></TimerComponent>
             </v-col>
             <v-col class="d-flex justify-center">
               <PlayerDisplay
@@ -321,6 +321,8 @@ export default {
 
         this.lastNopePlayer = state.lastNopePlayer.name;
 
+        this.countDown = 10;
+
         this.showCreateRoom = false;
       });
     },
@@ -353,7 +355,7 @@ export default {
       this.disablePlayNope = true;
     },
     playNope() {
-      SocketioService.playNope();
+      SocketioService.playNope(this.name);
     },
     async playCard() {
       if (this.selectedIndex !== -1) {

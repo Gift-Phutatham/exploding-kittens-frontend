@@ -43,24 +43,10 @@ export default defineComponent({
   },
   data: () => ({
     message: '',
-    //     chats: [{
-    //     name: "123213",
-    //     message: "55513",
-    // },{
-    //     name: "123123",
-    //     message: "sass",
-    // },{
-    //     name: "123123",
-    //     message: "123312",
-    // },{
-    //     name: "123231",
-    //     message: "123312",
-    // },],
   }),
   methods: {
     sendMessage() {
       if (this.message) {
-        console.log(this.message);
         this.submitMessageCallback(this.message);
         this.message = '';
       }

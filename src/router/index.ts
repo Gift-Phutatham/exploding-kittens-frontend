@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/HomeView.vue';
-// import CreateRoom from '../views/CreateRoomView.vue';
-import GameRoom from '../views/GameRoomView2.vue';
+import GameRoom from '../views/GameRoomView.vue';
 import PageNotFound from '../views/PageNotFound.vue';
 
 const router = createRouter({
@@ -12,11 +11,6 @@ const router = createRouter({
       name: 'Home',
       component: Home,
     },
-    // {
-    //   path: '/CreateRoom',
-    //   name: 'Create Room',
-    //   component: CreateRoom,
-    // },
     {
       path: '/GameRoom',
       name: 'Game Room',

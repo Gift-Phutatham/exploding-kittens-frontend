@@ -1,6 +1,6 @@
 <template>
   <div class="bg-image d-flex align-end justify-center">
-    <v-btn class="button" href="/CreateRoom">Create / Join Room</v-btn>
+    <v-btn class="button" href="/GameRoom">Create / Join Room</v-btn>
   </div>
 </template>
 

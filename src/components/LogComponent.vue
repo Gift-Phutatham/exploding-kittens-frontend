@@ -23,8 +23,5 @@ export default defineComponent({
       required: true,
     },
   },
-  // data: () => ({
-  //   logs: [],
-  // }),
 });
 </script>

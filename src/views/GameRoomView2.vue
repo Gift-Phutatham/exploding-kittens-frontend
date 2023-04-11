@@ -14,7 +14,8 @@
         <v-col cols="10">
           <v-row>
             <v-col class="d-flex justify-start" cols="auto">
-              <div class="display-1 text-center">{{ count }}</div>
+              <div class="text-center">Timer: {{ count }}</div>
+              <div class="text-center">Timer for Nope: {{ nopeCount }}</div>
             </v-col>
             <v-col class="d-flex justify-center">
               <PlayerDisplay
@@ -174,6 +175,7 @@ export default {
       lastNopePlayer: '',
 
       count: 0,
+      nopeCount: 0,
       nopeTimeout: 5,
 
       disableCard: false,
@@ -268,13 +270,14 @@ export default {
         this.showRandomCardDialog = true;
       });
 
+      this.startTimer();
+      this.startNopeTimer();
+
       SocketioService.subscribeToTimer((msg: any) => {
-        console.log(msg);
         if (+msg === 10) {
           this.count = 10;
-          this.startTimer();
         } else {
-          this.nopeTimeout = 5;
+          this.nopeCount = 5;
         }
       });
 
@@ -346,7 +349,13 @@ export default {
       setInterval(() => {
         if (this.count > 0) {
           this.count--;
-          console.log(`>>> ${this.count}`);
+        }
+      }, 1000);
+    },
+    startNopeTimer() {
+      setInterval(() => {
+        if (this.nopeCount > 0) {
+          this.nopeCount--;
         }
       }, 1000);
     },

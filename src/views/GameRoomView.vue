@@ -25,7 +25,9 @@
               ></PlayerDisplay>
             </v-col>
           </v-row>
-          <div class="d-flex justify-space-between align-center center">
+          <div
+            class="d-flex justify-space-between align-center center my-7 my-sm-7 my-md-0 my-lg-0 my-xl-0 my-xxl-0"
+          >
             <PlayerDisplay
               :name="playerName2"
               :selectedCharacterSrc="selectedCharacter2"
@@ -35,7 +37,7 @@
               <DrawPileComponent></DrawPileComponent>
               <CardComponent
                 v-if="latestCard"
-                class="ml-3"
+                class="mt-3 mt-sm-3 ml-md-3 ml-lg-3 ml-xl-3 ml-xxl-3"
                 :name="latestCard"
                 :description="allCards[latestCard].description"
                 :color="allCards[latestCard].color"

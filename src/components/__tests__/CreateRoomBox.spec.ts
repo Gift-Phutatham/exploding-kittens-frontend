@@ -39,7 +39,6 @@ describe('CreateRoomBox', () => {
       },
     });
 
-
     // no input
     expect(wrapper.find('.v-btn').element.hasAttribute('disabled')).toBe(true);
 

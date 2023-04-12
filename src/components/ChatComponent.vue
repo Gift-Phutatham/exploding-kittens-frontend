@@ -1,8 +1,8 @@
 <template>
-  <v-card width="225">
-    <v-banner class="text-center text-subtitle-1 py-2"> Chat Box </v-banner>
-    <v-card class="d-flex flex-column-reverse overflow-y-auto" height="300" variant="flat">
-      <v-card-item class="text-justify text-caption">
+  <v-card width="350" class="chat-box">
+    <v-banner class="text-center text-h5"> Chat Box </v-banner>
+    <v-card class="d-flex flex-column-reverse overflow-y-auto" height="300" variant="outlined">
+      <v-card-item class="text-justify text-subtitle-1">
         <div v-for="(chat, index) in chats" :key="index">
           <span class="font-weight-bold">{{ chat.name }}</span> :
           <div>{{ chat.message }}</div>
@@ -14,12 +14,13 @@
     <v-form class="d-flex" @submit.prevent>
       <v-text-field
         v-model="message"
-        label="Message"
-        variant="solo"
+        label="Type your message here"
+        variant="outlined"
         single-line
         hide-details
-        density="compact"
+        dense
         append-inner-icon="mdi-send"
+        class="chat-box-text-field"
         @click:append-inner="sendMessage"
       ></v-text-field>
     </v-form>
@@ -31,17 +32,50 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'ChatComponent',
+  props: {
+    submitMessageCallback: {
+      type: Function,
+      required: true,
+    },
+    chats: {
+      type: Array<any>,
+      required: true,
+    },
+  },
   data: () => ({
     message: '',
-    chats: [],
   }),
   methods: {
     sendMessage() {
       if (this.message) {
-        console.log(this.message);
+        this.submitMessageCallback(this.message);
         this.message = '';
       }
     },
   },
 });
 </script>
+
+<style scoped>
+.chat-box {
+  background-color: #943131;
+  color: #fff;
+  border: 6px solid #943131;
+  font-family: 'Roboto', sans-serif;
+}
+
+.chat-box-text-field {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.v-card-item {
+  padding: 0 16px 10px;
+}
+
+.v-banner {
+  background-color: #981515;
+  color: white;
+  border: 6px solid #ffffff;
+}
+</style>

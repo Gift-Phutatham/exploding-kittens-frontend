@@ -29,6 +29,7 @@ describe('CreateRoomBox', () => {
       roomId: '1234',
       selectedCharacterSrc: BlackCatPlayer,
     });
+    expect(wrapper.find('.v-btn').element.hasAttribute('disabled')).toBe(false);
   });
 
   it('disables create button when form is invalid', async () => {
@@ -38,14 +39,33 @@ describe('CreateRoomBox', () => {
       },
     });
 
-    // expect(wrapper.find('.v-btn').attributes('disabled')).toBeTruthy();
 
+    // no input
+    expect(wrapper.find('.v-btn').element.hasAttribute('disabled')).toBe(true);
+
+    //only name input
     await wrapper.setData({
       name: 'Alice',
       roomId: '',
     });
+    expect(wrapper.find('.v-btn').element.hasAttribute('disabled')).toBe(true);
 
-    // expect(wrapper.find('.v-btn').attributes('disabled')).toBeTruthy();
+    //only room id input
+    await wrapper.setData({
+      name: '',
+      roomId: '1234',
+    });
+    expect(wrapper.find('.v-btn').element.hasAttribute('disabled')).toBe(true);
+
+    //only select character input
+    await wrapper.setData({
+      name: '',
+      roomId: '',
+    });
+    // Select BlackCatPlayer
+    await wrapper.findComponent(CharacterSelector).vm.$emit('select-character', BlackCatPlayer);
+    await wrapper.find('.v-btn').trigger('click');
+    expect(wrapper.find('.v-btn').element.hasAttribute('disabled')).toBe(true);
   });
 
   it('emits create-room event with correct data when selecting different characters', async () => {

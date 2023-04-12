@@ -34,7 +34,6 @@ describe('SeeTheFutureDialog', () => {
     expect(wrapper.exists()).toBe(true);
     expect(wrapper.vm.openDialog).toBe(true);
     expect(wrapper.vm.themeColor).toBe('#EB217D');
-    // expect(wrapper.find('.v-btn').exists()).toBe(true);
 
     const cardComponents = wrapper.findAllComponents({ name: 'CardComponent' });
     expect(cardComponents).toHaveLength(3);
@@ -47,11 +46,5 @@ describe('SeeTheFutureDialog', () => {
         Object.values(propsData.topThreeCards)[i].color,
       );
     }
-  });
-
-  it('emits onClose event and closes dialog when "Done" button is clicked', async () => {
-    // await wrapper.find('.v-btn').trigger('click');
-    // expect(wrapper.emitted('onClose')).toBeTruthy();
-    // expect(wrapper.vm.openDialog).toBe(false);
   });
 });

@@ -55,7 +55,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style>
 .outer-card {
   border: 6px solid #981515;
 }

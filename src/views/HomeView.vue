@@ -10,7 +10,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .bg-image {
   background-image: url('@/assets/background/homepage.png');
 }

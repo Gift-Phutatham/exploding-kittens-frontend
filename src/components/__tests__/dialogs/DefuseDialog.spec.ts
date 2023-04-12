@@ -1,15 +1,23 @@
 import { describe, it, expect } from 'vitest';
-
 import { mount } from '@vue/test-utils';
-import RandomCardDialog from '@/components/dialogs/RandomCardDialog.vue';
-
+import DefuseDialog from '@/components/dialogs/DefuseDialog.vue';
 import { createVuetify } from 'vuetify';
 
-describe('RandomCardDialog', () => {
+describe('DefuseDialog', () => {
   const vuetify = createVuetify();
 
+  const propsData = {
+    card: {
+      Defuse: {
+        description: 'A card that defuses the bomb',
+        color: 'green',
+      },
+    },
+  };
+
   it('renders properly', () => {
-    const wrapper = mount(RandomCardDialog, {
+    const wrapper = mount(DefuseDialog, {
+      propsData,
       global: {
         plugins: [vuetify],
       },
@@ -17,13 +25,13 @@ describe('RandomCardDialog', () => {
 
     expect(wrapper.exists()).toBe(true);
     expect(wrapper.vm.openDialog).toBe(true);
-    expect(wrapper.vm.themeColor).toBe('#232321');
     // expect(wrapper.find('.v-btn').exists()).toBe(true);
-    // expect(wrapper.find('.text-h6').text()).toBe('You got a card from another player.');
+    // expect(wrapper.find('.text-h6').text()).toBe('You got a Defuse card. You SURVIVE!');
   });
 
-  it('emits onClose event and closes dialog when "Done" button is clicked', async () => {
-    const wrapper = mount(RandomCardDialog, {
+  it('closes the dialog when the Done button is clicked', async () => {
+    const wrapper = mount(DefuseDialog, {
+      propsData,
       global: {
         plugins: [vuetify],
       },

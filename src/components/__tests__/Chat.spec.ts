@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { createVuetify } from 'vuetify';
 import ChatComponent from '../ChatComponent.vue';
-import vuetify from '@/plugins/vuetify';
 
 describe('ChatComponent', () => {
   const vuetify = createVuetify();
@@ -18,7 +17,7 @@ describe('ChatComponent', () => {
 
   it('adds a new chat message', async () => {
     const message = wrapper.find('input[type="text"]');
-    const send = wrapper.find('.v-input__icon--append-inner');
+    // const send = wrapper.find('.v-input__icon--append-inner');
 
     await message.setValue('Hello');
     // await send.trigger('click');

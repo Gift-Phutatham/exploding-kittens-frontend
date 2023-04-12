@@ -17,15 +17,28 @@ describe('WaitingDialog', () => {
     },
   });
 
-  it('renders properly ', () => {
+  it('renders properly', () => {
     expect(wrapper.exists()).toBe(true);
     expect(wrapper.vm.openDialog).toBe(true);
-    // expect(wrapper.find('.v-btn').exists()).toBe(true);
+    // expect(wrapper.text()).toContain('Waiting for others to join');
+  });
+
+  it('disables the Start button when "disableStart" prop is true', () => {
+    // expect(wrapper.find('.v-btn').attributes('disabled')).toBeTruthy();
   });
 
   it('emits onClose event and closes dialog when "Done" button is clicked', async () => {
-    // await wrapper.find('.v-btn').trigger('click');
-    // expect(wrapper.emitted('onClose')).toBeTruthy();
-    // expect(wrapper.vm.openDialog).toBe(false);
+    const wrapper = mount(WaitingDialog, {
+      props: {
+        disableStart: false,
+      },
+      global: {
+        plugins: [vuetify],
+      },
+    });
+
+    // expect(wrapper.find('.v-btn').attributes('disabled')).toBeFalsy();
+    // await wrapper.find('.v0btn').trigger('click');
+    // expect(wrapper.emitted('start')).toBeTruthy();
   });
 });

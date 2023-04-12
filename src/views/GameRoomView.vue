@@ -297,9 +297,9 @@ export default {
         this.playerName3 = players[2];
         this.diedPlayer = state.diedPlayer.map((players: any) => players.name);
 
-        for (let i = 0; i < state.allPlayers.length; i++) {
-          if (state.allPlayers[i].name === this.name) {
-            this.cardsInHand = state.allPlayers[i].hand.map((card: any) => card.name);
+        for (const player of state.allPlayers) {
+          if (player.name === this.name) {
+            this.cardsInHand = player.hand.map((card: any) => card.name);
             break;
           }
         }

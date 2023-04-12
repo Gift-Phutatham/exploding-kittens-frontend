@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { createVuetify } from 'vuetify';
 import DrawPileComponent from '../DrawPileComponent.vue';
-import img from '@/assets/images/ExplodingKittens.png';
 
 describe('DrawPileComponent', () => {
   const vuetify = createVuetify();

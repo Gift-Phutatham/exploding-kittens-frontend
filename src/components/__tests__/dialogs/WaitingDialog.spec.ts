@@ -1,12 +1,17 @@
 import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import RandomCardDialog from '@/components/dialogs/RandomCardDialog.vue';
+import WaitingDialog from '@/components/dialogs/WaitingDialog.vue';
 import { createVuetify } from 'vuetify';
 
-describe('RandomCardDialog', () => {
+describe('WaitingDialog', () => {
   const vuetify = createVuetify();
 
-  const wrapper = mount(RandomCardDialog, {
+  const propsData = {
+    disableStart: true,
+  };
+
+  const wrapper = mount(WaitingDialog, {
+    propsData,
     global: {
       plugins: [vuetify],
     },
@@ -15,6 +20,5 @@ describe('RandomCardDialog', () => {
   it('renders properly', () => {
     expect(wrapper.exists()).toBe(true);
     expect(wrapper.vm.openDialog).toBe(true);
-    expect(wrapper.vm.themeColor).toBe('#232321');
   });
 });
